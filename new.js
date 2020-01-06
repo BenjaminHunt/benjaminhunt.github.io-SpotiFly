@@ -57,9 +57,13 @@ window.onSpotifyWebPlaybackSDKReady = () => {
   start_player(token);
 };
 
+function get_player_name() {
+    return "SpotiFly Game";
+}
+
 function start_player(token) {
   const player = new Spotify.Player({
-    name: 'Spotifly Game',
+    name: get_player_name(),
     getOAuthToken: cb => { cb(token); }
   });
 
@@ -84,6 +88,8 @@ function start_player(token) {
 
   // Connect to the player!
   player.connect();
+
+  document.getElementById("header1").innerHTML = "Check Your Spotify App for \"" + get_player_name() + "\"";
 }
 
 function auth() {
@@ -104,7 +110,7 @@ function auth() {
   let _token = hash.access_token;
   //createCookie("spotify_token", _token, 2);
 
-  //document.getElementById("token_block").innerHTML = "<br>token: " + _token;
+  document.getElementById("token_block").innerHTML = "<br>token: " + _token;
 
   const authEndpoint = 'https://accounts.spotify.com/authorize';
 
