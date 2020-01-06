@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Spotify Web Playback SDK Quick Start Tutorial</title>
+  <link rel="stylesheet" type="text/css" href="play.css">
+  <script src="https://sdk.scdn.co/spotify-player.js"></script>
+  <script src="new.js"></script>
+</head>
+<body>
+  <h1>Spotify Web Playback SDK Quick Start Tutorial</h1>
+  <h2>Open your console log: <code>View > Developer > JavaScript Console</code></h2>
+  <!-- We will insert our code here. -->
+  <div id="game_display">
+    <div id="token_block">
+      <br>token: xxx
+    </div>
+
+    <div id="album_cover"></div>
+    <table style="text-align: center">
+      <tr>
+        <th align="right">Song</th>
+        <th align="left"><input type="text" id="song_guess" name="song title" onkeydown="return guess_song(event)"></th>
+        <th id="song_state"></th>
+      </tr>
+      <tr>
+        <th align="right">Artist</th>
+        <th align="left"><input type="text" id="artist_guess" name="artist's name" onkeydown="return guess_artist(event)"></th>
+        <th id="artist_state"></th>
+      </tr>
+      <tr>
+        <th align="right">Album</th>
+        <th align="left"><input type="text" id="album_guess" name="album name" onkeydown="return guess_album(event)"></th>
+        <th id="album_state"></th>
+      </tr>
+    </table>
+  </div>
+</body>
+</html>
