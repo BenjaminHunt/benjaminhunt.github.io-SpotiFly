@@ -1,12 +1,12 @@
 function guess_song(event) {
-    answer = 'song';
-    state_val = '';
-    var x = event.keyCode;
-    if(event.keyCode == 8)
+    let answer = 'song';
+    let state_val = '';
+    let x = event.keyCode;
+    if(x == 8)
          state_val= '';
-    if(event.keyCode == 9)
+    if(x == 9)
         return null;
-    if(event.keyCode == 13){
+    if(x == 13){
         guess = document.getElementById("song_guess").value;
         if(guess == answer)
             state_val = ':)';
@@ -17,15 +17,15 @@ function guess_song(event) {
 }
 
 function guess_artist(event) {
-    answer = 'artist';
-    state_val = '';
-    var x = event.keyCode;
-    if(event.keyCode == 8)
+    let answer = 'artist';
+    let state_val = '';
+    let x = event.keyCode;
+    if(x == 8)
          state_val= '';
-    if(event.keyCode == 9)
+    if(x == 9)
         return null;
-    if(event.keyCode == 13){
-        guess = document.getElementById("artist_guess").value;
+    if(x == 13){
+        let guess = document.getElementById("artist_guess").value;
         if(guess == answer)
             state_val = ':)';
         else
@@ -35,15 +35,15 @@ function guess_artist(event) {
 }
 
 function guess_album(event) {
-    answer = 'album';
-    state_val = '';
-    var x = event.keyCode;
-    if(event.keyCode == 8)
+    let answer = 'album';
+    let state_val = '';
+    let x = event.keyCode;
+    if(x == 8)
          state_val= '';
-    if(event.keyCode == 9)
+    if(x == 9)
         return null;
-    if(event.keyCode == 13){
-        guess = document.getElementById("album_guess").value;
+    if(x == 13){
+        let guess = document.getElementById("album_guess").value;
         if(guess == answer)
             state_val = ':)';
         else
@@ -84,7 +84,7 @@ function start_player(token) {
 
   // Connect to the player!
   player.connect();
-};
+}
 
 function auth() {
   // Get the hash of the url
