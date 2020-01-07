@@ -1,6 +1,7 @@
 TODO List for this app:
 
 Core functionality:
+- Remove Ajax Sync Behavior. Replace with await/promises/then solution
 - Play on Web Page Automatically
 - Page Progression (not all on new.html)
 - View/Select Personal Playlists after Auth
@@ -12,7 +13,8 @@ Core functionality:
 - Lock Field after correct guess
 :) Button to continue to next song
 - Disable Autoplay?
-- Unlock & Clear on New Song
+:) Clear inputs/guess-status on new song
+- Unlock inputs on New Song
 
 Goals:
 - Replace breaks with css spacing/padding

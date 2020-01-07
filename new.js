@@ -125,6 +125,7 @@ function auth() {
       "user-read-private",
       "user-read-currently-playing",
       //"playlist-read-private",
+      "user-read-playback-state",
       "user-modify-playback-state"
   ];
 
@@ -153,7 +154,7 @@ function get_artists_str(artists){
 }
 
 function send_simple_request(method, url_param){
-    send_simple_request(method, url_param, true);
+    return send_simple_request(method, url_param, true);
 }
 
 function send_simple_request(method, url_param, is_async) {
@@ -214,51 +215,50 @@ function pause_resume_song(){
         document.getElementById("pause").innerHTML = "PAUSE";
         send_simple_request("PUT", "https://api.spotify.com/v1/me/player/play");
     }
-
-    // TODO: SEND PAUSE/PLAY
 }
 
 function next_song(){
     send_simple_request("POST", "https://api.spotify.com/v1/me/player/next", false);
+    clear_guessing_fields();
     update_track();
     update_track();
     update_track();
 }
 
-function set_song_position(position_sec){
-    let position_ms = position_sec * 1000;
-    $.ajax(JSON.stringify({
-        url: "\thttps://api.spotify.com/v1/me/player/play",
+function get_web_player_id(){
+    let method = "GET";
+    let url_param = "https://api.spotify.com/v1/me/player/devices";
 
-        beforeSend: function(xhr) {
+    $.ajax({
+        type: method,
+        url: url_param,
+        beforeSend: function (xhr) {
             xhr.setRequestHeader("Authorization", "Bearer " + document.token);
             xhr.setRequestHeader("Accept", "application/json");
             xhr.setRequestHeader("Content-Type", "application/json");
-            xhr.body = {}
-        }, success: function(data){
+        }, success: function (data) {
             console.log(data);
-
-            let song = data.item.name;
-            if(song.includes("(feat."))
-                song = song.substring(0, song.indexOf("(feat.") - 1);
-            let num_artists = data.item.artists.length;
-            let artists = parse_artists(data.item.artists, num_artists);
-            let album = data.item.album.name;
-            if(album.includes("(feat."))
-                album = album.substring(0, album.indexOf("(feat.") - 1);
-            let album_cover = data.item.album.images[0].url;
-
-            document.getElementById("song_name").innerHTML =
-                "<br>song: " + song +
-                "<br>" + get_artists_str(artists) +
-                "<br>album: " + album;
-            document.getElementById("album_cover").innerHTML = "<img src=\"" +
-                album_cover + "\" height=\"450\" width=\"auto\">";
-
-        document.song = song;
-        document.artists = artists;
-        document.album = album;
+            for(let i=0; i<data.devices.length; i++){
+                if(data.devices[i] == get_player_name()){
+                    alert("id: " + data[i].id);
+                    break;
+                }
+            }
         }
-    }));
+    });
+
 }
 
+function clear_guessing_fields(){
+    let empty_str = "";
+    document.getElementById("song_state").innerHTML = empty_str;
+    document.getElementById("artist_state").innerHTML = empty_str;
+    document.getElementById("album_state").innerHTML = empty_str;
+    document.getElementById("song_guess").value = empty_str;
+    document.getElementById("artist_guess").value = empty_str;
+    document.getElementById("album_guess").value = empty_str;
+}
+
+function calculate_end_song(){
+    return null;
+}
