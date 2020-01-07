@@ -5,7 +5,7 @@ Core functionality:
 - View/Select Personal Playlists after Auth
 - Submit a Playlist link
 - Shuffle & Play <x> songs
-- Auto-update Album Cover
+- Auto-update Album Cover, song information
 - Blur Album Cover
 - Unblur after correct guesses
 - Lock Field after correct guess
