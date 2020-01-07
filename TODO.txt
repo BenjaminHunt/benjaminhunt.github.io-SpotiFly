@@ -17,6 +17,7 @@ Goals:
 - Accent Background Colors based on album cover
 - Results page
 - String Standardization/Cleaning (i.e. remove "(Deluxe)" from album names)
+- Handle Special Characters
 - Quiz again?
 - Support guessing ALL artists for songs with multiple artists *Probably very difficult
 - Presentable Front End Theme
