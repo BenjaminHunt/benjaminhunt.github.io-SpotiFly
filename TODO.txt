@@ -28,6 +28,7 @@ Goals:
 - Quiz again?
 - Support guessing ALL artists for songs with multiple artists *Probably very difficult
 - Presentable Front End Theme
+- Determine if song should automatically play when starts on web browser
 
 Bugs:
 - If "next song" selected while paused, will play automatically. Button SHOULD display "PAUSE" but doesn't
