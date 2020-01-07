@@ -221,6 +221,8 @@ function pause_resume_song(){
 function next_song(){
     send_simple_request("POST", "https://api.spotify.com/v1/me/player/next", false);
     update_track();
+    update_track();
+    update_track();
 }
 
 function set_song_position(position_sec){

@@ -10,7 +10,7 @@ Core functionality:
 - Blur Album Cover
 - Unblur after correct guesses
 - Lock Field after correct guess
-- Button to continue to next song
+:) Button to continue to next song
 - Disable Autoplay?
 - Unlock & Clear on New Song
 
@@ -29,3 +29,5 @@ Bugs:
 - If "next song" selected while paused, will play automatically. Button SHOULD display "PAUSE" but doesn't
 - If song is updated externally, song display doesn't update
 - If song ends, next song plays automatically and song does not update
+- Song updates too late when played on web page (when "next song" clicked, doesn't update until clicked again)
+    --> Temporary Fix: Pinging API 3 times appears to update it correctly
