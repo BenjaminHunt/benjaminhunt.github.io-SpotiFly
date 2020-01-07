@@ -1,6 +1,7 @@
 TODO List for this app:
 
 Core functionality:
+- Play on Web Page Automatically
 - Page Progression (not all on new.html)
 - View/Select Personal Playlists after Auth
 - Submit a Playlist link
@@ -14,6 +15,7 @@ Core functionality:
 - Unlock & Clear on New Song
 
 Goals:
+- Replace breaks with css spacing/padding
 - Track Progression Bar, timer
 - Accent Background Colors based on album cover
 - Results page
@@ -22,3 +24,8 @@ Goals:
 - Quiz again?
 - Support guessing ALL artists for songs with multiple artists *Probably very difficult
 - Presentable Front End Theme
+
+Bugs:
+- If "next song" selected while paused, will play automatically. Button SHOULD display "PAUSE" but doesn't
+- If song is updated externally, song display doesn't update
+- If song ends, next song plays automatically and song does not update

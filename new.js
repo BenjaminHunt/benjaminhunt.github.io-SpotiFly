@@ -114,8 +114,6 @@ function auth() {
   let _token = hash.access_token;
   //createCookie("spotify_token", _token, 2);
 
-  document.getElementById("token_block").innerHTML = "<br>token: " + _token;
-
   const authEndpoint = 'https://accounts.spotify.com/authorize';
 
   // Replace with your app's client ID, redirect URI and desired scopes
@@ -125,9 +123,9 @@ function auth() {
       "streaming",
       "user-read-email",
       "user-read-private",
-      "user-read-currently-playing" //,
+      "user-read-currently-playing",
       //"playlist-read-private",
-      //"user-modify-playback-state"
+      "user-modify-playback-state"
   ];
 
   // If there is no token, redirect to Spotify authorization
@@ -154,7 +152,26 @@ function get_artists_str(artists){
     }
 }
 
-function get_current_track(){
+function send_simple_request(method, url_param){
+    send_simple_request(method, url_param, true);
+}
+
+function send_simple_request(method, url_param, is_async) {
+    $.ajax({
+        type: method,
+        url: url_param,
+        async: is_async,
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader("Authorization", "Bearer " + document.token);
+            xhr.setRequestHeader("Accept", "application/json");
+            xhr.setRequestHeader("Content-Type", "application/json");
+        }, success: function (data) {
+            console.log(data);
+        }
+    });
+}
+
+function update_track(){
     $.ajax({
         url: "https://api.spotify.com/v1/me/player/currently-playing",
         beforeSend: function(xhr) {
@@ -175,10 +192,64 @@ function get_current_track(){
             let album_cover = data.item.album.images[0].url;
 
             document.getElementById("song_name").innerHTML =
-                " song: " + song +
-                " " + get_artists_str(artists) +
-                " album: " + album;
-            alert(album);
+                "<br>song: " + song +
+                "<br>" + get_artists_str(artists) +
+                "<br>album: " + album;
+            document.getElementById("album_cover").innerHTML = "<img src=\"" +
+                album_cover + "\" height=\"450\" width=\"auto\">";
+
+            document.song = song;
+            document.artists = artists;
+            document.album = album;
+        }
+    });
+}
+
+function pause_resume_song(){
+    let text = document.getElementById("pause").innerHTML;
+    if(text == "PAUSE"){
+        document.getElementById("pause").innerHTML = "RESUME";
+        send_simple_request("PUT", "https://api.spotify.com/v1/me/player/pause");
+    }else {
+        document.getElementById("pause").innerHTML = "PAUSE";
+        send_simple_request("PUT", "https://api.spotify.com/v1/me/player/play");
+    }
+
+    // TODO: SEND PAUSE/PLAY
+}
+
+function next_song(){
+    send_simple_request("POST", "https://api.spotify.com/v1/me/player/next", false);
+    update_track();
+}
+
+function set_song_position(position_sec){
+    let position_ms = position_sec * 1000;
+    $.ajax(JSON.stringify({
+        url: "\thttps://api.spotify.com/v1/me/player/play",
+
+        beforeSend: function(xhr) {
+            xhr.setRequestHeader("Authorization", "Bearer " + document.token);
+            xhr.setRequestHeader("Accept", "application/json");
+            xhr.setRequestHeader("Content-Type", "application/json");
+            xhr.body = {}
+        }, success: function(data){
+            console.log(data);
+
+            let song = data.item.name;
+            if(song.includes("(feat."))
+                song = song.substring(0, song.indexOf("(feat.") - 1);
+            let num_artists = data.item.artists.length;
+            let artists = parse_artists(data.item.artists, num_artists);
+            let album = data.item.album.name;
+            if(album.includes("(feat."))
+                album = album.substring(0, album.indexOf("(feat.") - 1);
+            let album_cover = data.item.album.images[0].url;
+
+            document.getElementById("song_name").innerHTML =
+                "<br>song: " + song +
+                "<br>" + get_artists_str(artists) +
+                "<br>album: " + album;
             document.getElementById("album_cover").innerHTML = "<img src=\"" +
                 album_cover + "\" height=\"450\" width=\"auto\">";
 
@@ -186,5 +257,6 @@ function get_current_track(){
         document.artists = artists;
         document.album = album;
         }
-    });
+    }));
 }
+
