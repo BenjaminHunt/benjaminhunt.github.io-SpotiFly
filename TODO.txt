@@ -1,0 +1,22 @@
+TODO List for this app:
+
+Core functionality:
+- Page Progression (not all on new.html)
+- View/Select Personal Playlists after Auth
+- Submit a Playlist link
+- Shuffle & Play <x> songs
+- Auto-update Album Cover
+- Blur Album Cover
+- Unblur after correct guesses
+- Lock Field after correct guess
+- Button to continue to next song
+- Disable Autoplay?
+- Unlock & Clear on New Song
+
+Goals:
+- Accent Background Colors based on album cover
+- Results page
+- String Standardization/Cleaning (i.e. remove "(Deluxe)" from album names)
+- Quiz again?
+- Support guessing ALL artists for songs with multiple artists *Probably very difficult
+- Presentable Front End Theme
