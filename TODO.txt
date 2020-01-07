@@ -14,6 +14,7 @@ Core functionality:
 - Unlock & Clear on New Song
 
 Goals:
+- Track Progression Bar, timer
 - Accent Background Colors based on album cover
 - Results page
 - String Standardization/Cleaning (i.e. remove "(Deluxe)" from album names)
