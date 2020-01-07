@@ -9,16 +9,18 @@ Core functionality:
 - View/Select Personal Playlists after Auth
 - Submit a Playlist link
 - Shuffle & Play <x> songs
-- Auto-update Album Cover, song information
+:/ Auto-update Album Cover, song information
+    --> not perfect, but kinda works (only on "next song" click")
 - Blur Album Cover
 - Unblur after correct guesses
-- Lock Field after correct guess
+:) Lock Field after correct guess
 :) Button to continue to next song
 - Disable Autoplay?
 :) Clear inputs/guess-status on new song
-- Unlock inputs on New Song
+:) Unlock inputs on New Song
 
 Goals:
+- Function that focuses unanswered fields
 - Replace breaks with css spacing/padding
 - Track Progression Bar, timer
 - Accent Background Colors based on album cover
@@ -35,5 +37,6 @@ Bugs:
 - If song is updated externally, song display doesn't update
 - If song ends, next song plays automatically and song does not update
 - Song updates too late when played on web page (when "next song" clicked, doesn't update until clicked again)
-    --> Temporary Fix: Pinging API 3 times appears to update it correctly
 - General async behavior/characteristics
+    --> Temporary patch: wait functions
+- let song = data.item.name; => Sometimes undefined??

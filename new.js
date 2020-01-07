@@ -1,5 +1,5 @@
 function guess_song(event) {
-    let answer = document.song.toLowerCase();
+    let answer = document.song;
     let state_val = '';
     let x = event.keyCode;
     if(x == 8)
@@ -8,10 +8,13 @@ function guess_song(event) {
         return null;
     if(x == 13){
         guess = document.getElementById("song_guess").value.toLowerCase();
-        if(guess == answer)
+        if(guess == answer.toLowerCase()){
             state_val = ':)';
-        else if(guess != answer)
-            state_val = 'X';
+            document.getElementById("song_guess").value = answer;
+            document.getElementById("song_guess").disabled = true;
+            document.getElementById("artist_guess").focus();
+        }else
+            state_val = ':(';
     }
     document.getElementById("song_state").innerHTML = state_val;
 }
@@ -19,8 +22,9 @@ function guess_song(event) {
 function guess_artist(event) {
     //TODO: Account for multiple artists
     let answer = document.artists;
+    let answer_lc = []
     for(let i = 0; i < answer.length; i++){
-        answer[i] = answer[i].toLowerCase();
+        answer_lc.push(answer[i].toLowerCase());
     }
     let state_val = '';
     let x = event.keyCode;
@@ -28,18 +32,21 @@ function guess_artist(event) {
          state_val= '';
     if(x == 9)
         return null;
-    if(x == 13){
+    if(x == 13) {
         let guess = document.getElementById("artist_guess").value.toLowerCase();
-        if(answer.includes(guess))
+        if (answer_lc.includes(guess)) {
+            document.getElementById("artist_guess").value = answer.join(', ');
+            document.getElementById("artist_guess").disabled = true;
+            document.getElementById("album_guess").focus();
             state_val = ':)';
-        else
-            state_val = 'X';
+        }else
+            state_val = ':(';
     }
     document.getElementById("artist_state").innerHTML = state_val;
 }
 
 function guess_album(event) {
-    let answer = document.album.toLowerCase();
+    let answer = document.album;
     let state_val = '';
     let x = event.keyCode;
     if(x == 8)
@@ -48,10 +55,12 @@ function guess_album(event) {
         return null;
     if(x == 13){
         let guess = document.getElementById("album_guess").value.toLowerCase();
-        if(answer == guess)
+        if(answer.toLowerCase() == guess) {
+            document.getElementById("album_guess").value = answer;
+            document.getElementById("album_guess").disabled = true;
             state_val = ':)';
-        else
-            state_val = 'X';
+        }else
+            state_val = ':(';
     }
     document.getElementById("album_state").innerHTML = state_val;
 }
@@ -59,7 +68,8 @@ function guess_album(event) {
 window.onSpotifyWebPlaybackSDKReady = () => {
     let token = auth();
     start_player(token);
-    play_this_browser(); //TODO: Add waiting behavior
+    setTimeout(function(){play_this_browser()}, 3000);
+    setTimeout(function(){resume_song()}, 1000);
 };
 
 function get_player_name() {
@@ -155,21 +165,17 @@ function get_artists_str(artists){
     }
 }
 
-function send_simple_request(method, url_param){
-    return send_simple_request(method, url_param, true);
-}
-
-function send_simple_request(method, url_param, is_async) {
+function send_simple_request(method, url_param) {
     $.ajax({
         type: method,
         url: url_param,
-        async: is_async,
         beforeSend: function (xhr) {
             xhr.setRequestHeader("Authorization", "Bearer " + document.token);
             xhr.setRequestHeader("Accept", "application/json");
             xhr.setRequestHeader("Content-Type", "application/json");
         }, success: function (data) {
             console.log(data);
+            setTimeout(function(){update_track()}, 500);
         }
     });
 }
@@ -224,23 +230,27 @@ function update_track(){
     });
 }
 
+function pause_song(){
+    document.getElementById("pause").innerHTML = "RESUME";
+    send_simple_request("PUT", "https://api.spotify.com/v1/me/player/pause");
+}
+
+function resume_song(){
+    document.getElementById("pause").innerHTML = "PAUSE";
+    send_simple_request("PUT", "https://api.spotify.com/v1/me/player/play");
+}
+
 function pause_resume_song(){
     let text = document.getElementById("pause").innerHTML;
-    if(text == "PAUSE"){
-        document.getElementById("pause").innerHTML = "RESUME";
-        send_simple_request("PUT", "https://api.spotify.com/v1/me/player/pause");
-    }else {
-        document.getElementById("pause").innerHTML = "PAUSE";
-        send_simple_request("PUT", "https://api.spotify.com/v1/me/player/play");
-    }
+    if(text == "PAUSE")
+        pause_song();
+    else
+        resume_song();
 }
 
 function next_song(){
-    send_simple_request("POST", "https://api.spotify.com/v1/me/player/next", false);
-    clear_guessing_fields();
-    update_track();
-    update_track();
-    update_track();
+    send_simple_request("POST", "https://api.spotify.com/v1/me/player/next");
+    reset_guessing_fields();
 }
 
 function play_this_browser(){
@@ -252,7 +262,7 @@ function play_this_browser(){
     update_track();
 }
 
-function clear_guessing_fields(){
+function reset_guessing_fields(){
     let empty_str = "";
     document.getElementById("song_state").innerHTML = empty_str;
     document.getElementById("artist_state").innerHTML = empty_str;
@@ -260,6 +270,10 @@ function clear_guessing_fields(){
     document.getElementById("song_guess").value = empty_str;
     document.getElementById("artist_guess").value = empty_str;
     document.getElementById("album_guess").value = empty_str;
+    document.getElementById("song_guess").disabled = false;
+    document.getElementById("artist_guess").disabled = false;
+    document.getElementById("album_guess").disabled = false;
+    document.getElementById("song_guess").focus();
 }
 
 function calculate_end_song(){
