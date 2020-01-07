@@ -143,7 +143,6 @@ function parse_artists(artists, length){
     for(let i = 0; i<length; i++){
         names.push(artists[i].name);
     }
-    alert(names.join(", "));
     return names;
 }
 
@@ -167,19 +166,19 @@ function get_current_track(){
 
             let song = data.item.name;
             if(song.includes("(feat."))
-                song = song.substring(0, song.indexOf("(feat.") - 1)
+                song = song.substring(0, song.indexOf("(feat.") - 1);
             let num_artists = data.item.artists.length;
             let artists = parse_artists(data.item.artists, num_artists);
             let album = data.item.album.name;
             if(album.includes("(feat."))
-                album = album.substring(0, song.indexOf("(feat.") - 1)
+                album = album.substring(0, album.indexOf("(feat.") - 1);
             let album_cover = data.item.album.images[0].url;
 
             document.getElementById("song_name").innerHTML =
-                "song: " + song +
-                " artists: " + artists +
-                //get_artists_str(artists) +
+                " song: " + song +
+                " " + get_artists_str(artists) +
                 " album: " + album;
+            alert(album);
             document.getElementById("album_cover").innerHTML = "<img src=\"" +
                 album_cover + "\" height=\"450\" width=\"auto\">";
 
