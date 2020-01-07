@@ -1,5 +1,5 @@
 function guess_song(event) {
-    let answer = 'song';
+    let answer = document.song.toLowerCase();
     let state_val = '';
     let x = event.keyCode;
     if(x == 8)
@@ -7,7 +7,7 @@ function guess_song(event) {
     if(x == 9)
         return null;
     if(x == 13){
-        guess = document.getElementById("song_guess").value;
+        guess = document.getElementById("song_guess").value.toLowerCase();
         if(guess == answer)
             state_val = ':)';
         else if(guess != answer)
@@ -17,7 +17,11 @@ function guess_song(event) {
 }
 
 function guess_artist(event) {
-    let answer = 'artist';
+    //TODO: Account for multiple artists
+    let answer = document.artists;
+    for(let i = 0; i < answer.length; i++){
+        answer[i] = answer[i].toLowerCase();
+    }
     let state_val = '';
     let x = event.keyCode;
     if(x == 8)
@@ -25,8 +29,8 @@ function guess_artist(event) {
     if(x == 9)
         return null;
     if(x == 13){
-        let guess = document.getElementById("artist_guess").value;
-        if(guess == answer)
+        let guess = document.getElementById("artist_guess").value.toLowerCase();
+        if(answer.includes(guess))
             state_val = ':)';
         else
             state_val = 'X';
@@ -35,7 +39,7 @@ function guess_artist(event) {
 }
 
 function guess_album(event) {
-    let answer = 'album';
+    let answer = document.album.toLowerCase();
     let state_val = '';
     let x = event.keyCode;
     if(x == 8)
@@ -43,8 +47,8 @@ function guess_album(event) {
     if(x == 9)
         return null;
     if(x == 13){
-        let guess = document.getElementById("album_guess").value;
-        if(guess == answer)
+        let guess = document.getElementById("album_guess").value.toLowerCase();
+        if(answer == guess)
             state_val = ':)';
         else
             state_val = 'X';
@@ -117,11 +121,71 @@ function auth() {
   // Replace with your app's client ID, redirect URI and desired scopes
   const clientId = 'd5e546a8a593407b92e7ff95044e576e';
   const redirectUri = 'http://localhost:8000/new.html';
-  const scopes = ["streaming", "user-read-email", "user-read-private"];
+  const permission_scopes = [
+      "streaming",
+      "user-read-email",
+      "user-read-private",
+      "user-read-currently-playing" //,
+      //"playlist-read-private",
+      //"user-modify-playback-state"
+  ];
 
   // If there is no token, redirect to Spotify authorization
   if (!_token) {
-    window.location = `${authEndpoint}?client_id=${clientId}&redirect_uri=${redirectUri}&scope=${scopes.join('%20')}&response_type=token&show_dialog=true`;
+    window.location = `${authEndpoint}?client_id=${clientId}&redirect_uri=${redirectUri}&scope=${permission_scopes.join('%20')}&response_type=token&show_dialog=true`;
   }
+  document.token = _token;
   return _token;
+}
+
+function parse_artists(artists, length){
+    let names = [];
+    for(let i = 0; i<length; i++){
+        names.push(artists[i].name);
+    }
+    alert(names.join(", "));
+    return names;
+}
+
+function get_artists_str(artists){
+    if(artists.length == 1){
+        return "artist: " + artists[0];
+    }else {
+        return "artists: " + artists.join(", ");
+    }
+}
+
+function get_current_track(){
+    $.ajax({
+        url: "https://api.spotify.com/v1/me/player/currently-playing",
+        beforeSend: function(xhr) {
+            xhr.setRequestHeader("Authorization", "Bearer " + document.token);
+            xhr.setRequestHeader("Accept", "application/json");
+            xhr.setRequestHeader("Content-Type", "application/json");
+        }, success: function(data){
+            console.log(data);
+
+            let song = data.item.name;
+            if(song.includes("(feat."))
+                song = song.substring(0, song.indexOf("(feat.") - 1)
+            let num_artists = data.item.artists.length;
+            let artists = parse_artists(data.item.artists, num_artists);
+            let album = data.item.album.name;
+            if(album.includes("(feat."))
+                album = album.substring(0, song.indexOf("(feat.") - 1)
+            let album_cover = data.item.album.images[0].url;
+
+            document.getElementById("song_name").innerHTML =
+                "song: " + song +
+                " artists: " + artists +
+                //get_artists_str(artists) +
+                " album: " + album;
+            document.getElementById("album_cover").innerHTML = "<img src=\"" +
+                album_cover + "\" height=\"450\" width=\"auto\">";
+
+        document.song = song;
+        document.artists = artists;
+        document.album = album;
+        }
+    });
 }
