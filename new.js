@@ -57,8 +57,9 @@ function guess_album(event) {
 }
 
 window.onSpotifyWebPlaybackSDKReady = () => {
-  let token = auth();
-  start_player(token);
+    let token = auth();
+    start_player(token);
+    play_this_browser(); //TODO: Add waiting behavior
 };
 
 function get_player_name() {
@@ -83,6 +84,7 @@ function start_player(token) {
   // Ready
   player.addListener('ready', ({ device_id }) => {
     console.log('Ready with Device ID', device_id);
+    document.player_id = device_id;
   });
 
   // Not Ready
@@ -172,6 +174,22 @@ function send_simple_request(method, url_param, is_async) {
     });
 }
 
+function send_simple_request_with_pay(method, url_param, payload, is_async) {
+    $.ajax({
+        type: method,
+        url: url_param,
+        data: JSON.stringify(payload),
+        async: is_async,
+        beforeSend: function (xhr) {
+            xhr.setRequestHeader("Authorization", "Bearer " + document.token);
+            xhr.setRequestHeader("Accept", "application/json");
+            xhr.setRequestHeader("Content-Type", "application/json");
+        }, success: function (data) {
+            console.log(data);
+        }
+    });
+}
+
 function update_track(){
     $.ajax({
         url: "https://api.spotify.com/v1/me/player/currently-playing",
@@ -225,28 +243,13 @@ function next_song(){
     update_track();
 }
 
-function get_web_player_id(){
-    let method = "GET";
-    let url_param = "https://api.spotify.com/v1/me/player/devices";
+function play_this_browser(){
+    let method = "PUT";
+    let url_param = "https://api.spotify.com/v1/me/player";
+    let payload = {"device_ids":[document.player_id]};
 
-    $.ajax({
-        type: method,
-        url: url_param,
-        beforeSend: function (xhr) {
-            xhr.setRequestHeader("Authorization", "Bearer " + document.token);
-            xhr.setRequestHeader("Accept", "application/json");
-            xhr.setRequestHeader("Content-Type", "application/json");
-        }, success: function (data) {
-            console.log(data);
-            for(let i=0; i<data.devices.length; i++){
-                if(data.devices[i] == get_player_name()){
-                    alert("id: " + data[i].id);
-                    break;
-                }
-            }
-        }
-    });
-
+    send_simple_request_with_pay("PUT", url_param, payload, true);
+    update_track();
 }
 
 function clear_guessing_fields(){

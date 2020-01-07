@@ -3,6 +3,8 @@ TODO List for this app:
 Core functionality:
 - Remove Ajax Sync Behavior. Replace with await/promises/then solution
 - Play on Web Page Automatically
+- Next song calculations
+
 - Page Progression (not all on new.html)
 - View/Select Personal Playlists after Auth
 - Submit a Playlist link
@@ -33,3 +35,4 @@ Bugs:
 - If song ends, next song plays automatically and song does not update
 - Song updates too late when played on web page (when "next song" clicked, doesn't update until clicked again)
     --> Temporary Fix: Pinging API 3 times appears to update it correctly
+- General async behavior/characteristics
