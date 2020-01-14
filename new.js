@@ -1,3 +1,9 @@
+function evaluate_answers(){
+    // Check which answers are correct
+    // All Correct => unblur
+    // Not All Correct => Forward item.focus appropriately
+}
+
 function guess_song(event) {
     let answer = document.song;
     let state_val = '';
@@ -254,7 +260,6 @@ function next_song(){
 }
 
 function play_this_browser(){
-    let method = "PUT";
     let url_param = "https://api.spotify.com/v1/me/player";
     let payload = {"device_ids":[document.player_id]};
 
