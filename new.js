@@ -9,17 +9,18 @@ function guess_song(event) {
     let state_val = '';
     let x = event.code;
     console.log(x);
-    if(x === 8)
+    if(x === "Backspace")
          state_val= '';
-    else if(x === 9)
+    else if(x === "Tab")
         return null;
-    else if(x === 13){
+    else if(x === "Enter"){
         let guess = document.getElementById("song_guess").value.toLowerCase();
         if(guess === answer.toLowerCase()){
             state_val = ':)';
             document.getElementById("song_guess").value = answer;
             document.getElementById("song_guess").disabled = true;
             document.getElementById("artist_guess").focus();
+            document.getElementById("album_cover").classList.remove("album_covered");
         }else
             state_val = ':(';
     }
@@ -265,6 +266,7 @@ function pause_resume_song(){
 function next_song(){
     send_simple_request("POST", "https://api.spotify.com/v1/me/player/next");
     reset_guessing_fields();
+    document.getElementById("album_cover").classList.add("album_covered");
 }
 
 function play_this_browser(){

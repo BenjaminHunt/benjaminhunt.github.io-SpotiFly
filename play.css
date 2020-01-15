@@ -22,7 +22,7 @@ p.normal {
 }
 
 .album_covered {
-    filter: blur(10px);
+    filter: blur(15px);
 }
 
 table {
