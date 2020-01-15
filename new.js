@@ -7,14 +7,15 @@ function evaluate_answers(){
 function guess_song(event) {
     let answer = document.song;
     let state_val = '';
-    let x = event.keyCode;
-    if(x == 8)
+    let x = event.code;
+    console.log(x);
+    if(x === 8)
          state_val= '';
-    else if(x == 9)
+    else if(x === 9)
         return null;
-    else if(x == 13){
-        guess = document.getElementById("song_guess").value.toLowerCase();
-        if(guess == answer.toLowerCase()){
+    else if(x === 13){
+        let guess = document.getElementById("song_guess").value.toLowerCase();
+        if(guess === answer.toLowerCase()){
             state_val = ':)';
             document.getElementById("song_guess").value = answer;
             document.getElementById("song_guess").disabled = true;

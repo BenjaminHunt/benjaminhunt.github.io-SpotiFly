@@ -21,6 +21,10 @@ p.normal {
     background: black; /*album cover?*/
 }
 
+.album_covered {
+    filter: blur(10px);
+}
+
 table {
     mso-cellspacing: 3px;
     border-spacing: 5px;
