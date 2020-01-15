@@ -10,9 +10,9 @@ function guess_song(event) {
     let x = event.keyCode;
     if(x == 8)
          state_val= '';
-    if(x == 9)
+    else if(x == 9)
         return null;
-    if(x == 13){
+    else if(x == 13){
         guess = document.getElementById("song_guess").value.toLowerCase();
         if(guess == answer.toLowerCase()){
             state_val = ':)';
@@ -71,47 +71,51 @@ function guess_album(event) {
     document.getElementById("album_state").innerHTML = state_val;
 }
 
-window.onSpotifyWebPlaybackSDKReady = () => {
+window.onSpotifyWebPlaybackSDKReady = async () => {
     let token = auth();
-    start_player(token);
-    setTimeout(function(){play_this_browser()}, 3000);
-    setTimeout(function(){resume_song()}, 1000);
+    let x = await start_player(token);
+    console.log(x);
+    await play_this_browser();
+    update_track();
 };
 
 function get_player_name() {
     return "SpotiFly Game";
 }
 
-function start_player(token) {
-  const player = new Spotify.Player({
-    name: get_player_name(),
-    getOAuthToken: cb => { cb(token); }
-  });
+async function start_player(token) {
+    return new Promise((resolve, reject) => {
+        const player = new Spotify.Player({
+        name: get_player_name(),
+        getOAuthToken: cb => { cb(token); }
+        });
 
-  // Error handling
-  player.addListener('initialization_error', ({ message }) => { console.error(message); });
-  player.addListener('authentication_error', ({ message }) => { console.error(message); });
-  player.addListener('account_error', ({ message }) => { console.error(message); });
-  player.addListener('playback_error', ({ message }) => { console.error(message); });
+        // Error handling
+        player.addListener('initialization_error', ({ message }) => { console.error(message); });
+        player.addListener('authentication_error', ({ message }) => { console.error(message); });
+        player.addListener('account_error', ({ message }) => { console.error(message); });
+        player.addListener('playback_error', ({ message }) => { console.error(message); });
 
-  // Playback status updates
-  player.addListener('player_state_changed', state => { console.log(state); });
+        // Playback status updates
+        player.addListener('player_state_changed', state => { console.log(state); });
 
-  // Ready
-  player.addListener('ready', ({ device_id }) => {
-    console.log('Ready with Device ID', device_id);
-    document.player_id = device_id;
-  });
+        // Ready
+        player.addListener('ready', ({ device_id }) => {
+            console.log('Ready with Device ID', device_id);
+            document.player_id = device_id;
+            resolve("Player Started :)")
+        });
 
-  // Not Ready
-  player.addListener('not_ready', ({ device_id }) => {
-    console.log('Device ID has gone offline', device_id);
-  });
+        // Not Ready
+        player.addListener('not_ready', ({ device_id }) => {
+            console.log('Device ID has gone offline', device_id);
+        });
 
-  // Connect to the player!
-  player.connect();
+        // Connect to the player!
+        player.connect();
 
-  document.getElementById("header1").innerHTML = "Check Your Spotify App for \"" + get_player_name() + "\"";
+        document.getElementById("header1").innerHTML = "Check Your Spotify App for \"" + get_player_name() + "\"";
+    });
 }
 
 function auth() {
@@ -180,7 +184,10 @@ function send_simple_request(method, url_param) {
             xhr.setRequestHeader("Accept", "application/json");
             xhr.setRequestHeader("Content-Type", "application/json");
         }, success: function (data) {
-            console.log(data);
+            if(data)
+                console.log(data);
+            else
+                console.log("no data");
             setTimeout(function(){update_track()}, 500);
         }
     });
@@ -260,11 +267,13 @@ function next_song(){
 }
 
 function play_this_browser(){
-    let url_param = "https://api.spotify.com/v1/me/player";
-    let payload = {"device_ids":[document.player_id]};
+    return new Promise((resolve, reject) => {
+        const url_param = "https://api.spotify.com/v1/me/player";
+        const payload = {"device_ids":[document.player_id]};
 
-    send_simple_request_with_pay("PUT", url_param, payload, true);
-    update_track();
+        send_simple_request_with_pay("PUT", url_param, payload, true);
+        resolve("playing in this browser!");
+    });
 }
 
 function reset_guessing_fields(){

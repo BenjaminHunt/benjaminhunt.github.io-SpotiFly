@@ -1,8 +1,8 @@
 TODO List for this app:
 
 Core functionality:
-- Remove Ajax Sync Behavior. Replace with await/promises/then solution
-- Play on Web Page Automatically
+:) Remove Ajax Sync Behavior. Replace with await/promises/then solution
+:) Play on Web Page Automatically
 - Next song calculations
 
 - Page Progression (not all on new.html)
@@ -13,11 +13,7 @@ Core functionality:
     --> not perfect, but kinda works (only on "next song" click")
 - Blur Album Cover
 - Unblur after correct guesses
-:) Lock Field after correct guess
-:) Button to continue to next song
 - Disable Autoplay?
-:) Clear inputs/guess-status on new song
-:) Unlock inputs on New Song
 
 Goals:
 - Function that focuses unanswered fields
