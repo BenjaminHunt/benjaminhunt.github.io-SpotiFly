@@ -1,3 +1,11 @@
+window.onSpotifyWebPlaybackSDKReady = async () => {
+    let token = auth();
+    let x = await start_player(token);
+    console.log(x);
+    await play_this_browser();
+    update_track();
+};
+
 function evaluate_answers(){
     if(
         document.getElementById("song_guess").disabled === true
@@ -94,14 +102,6 @@ function guess_album(event) {
     }
     document.getElementById("album_state").innerHTML = state_val;
 }
-
-window.onSpotifyWebPlaybackSDKReady = async () => {
-    let token = auth();
-    let x = await start_player(token);
-    console.log(x);
-    await play_this_browser();
-    update_track();
-};
 
 function get_player_name() {
     return "SpotiFly Game";
