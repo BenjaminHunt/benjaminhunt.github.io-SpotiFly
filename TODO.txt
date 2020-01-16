@@ -1,7 +1,6 @@
 TODO List for this app:
 
 Shortlist:
-:) Accept track nicknames, ignores (Text) at end of albums
 - End of song calculator/timer/stopwatch
 
 Core functionality:
@@ -12,9 +11,11 @@ Core functionality:
 - Shuffle & Play <x> songs
 :/ Auto-update Album Cover, song information
     --> not perfect, but kinda works (only on "next song" click")
+- support "basically correct" answers => songs existing on singles and LPs, etc
 
 Goals:
 - Reveal Answer button!
+- Disable pausing from browser? maybe not necessary
 - remove answers at top. maybe have debug mode?
 - Function that focuses unanswered fields
 - Replace breaks with css spacing/padding
@@ -29,10 +30,10 @@ Goals:
 - Determine if song should automatically play when starts on web browser
 
 Bugs/Improvement:
-- Doesn't load album cover unless spotify is previously playing on another device
-- Promise for next song/update song THEN unlock fields
+- Doesn't load album cover unless spotify is previously playing on another device?
+:) Promise for next song/update song THEN unlock fields => uses listeners
 - If "next song" selected while paused, will play automatically. Button SHOULD display "PAUSE" but doesn't
-- If song is updated externally, song display doesn't update
+:) If song is updated externally, song display doesn't update
 - If song ends, next song plays automatically and song does not update
 :( let song = data.item.name; => Sometimes undefined??
     --> Thought fixed,  but it isn't. Within update track function that has its own call
