@@ -235,9 +235,10 @@ function update_track(){
             xhr.setRequestHeader("Accept", "application/json");
             xhr.setRequestHeader("Content-Type", "application/json");
         }, success: function(data){
-            if(!data)
-                console.log("request complete.");
-            console.log(data);
+            if(data)
+                console.log(data);
+            else
+                console.log("No return data.");
 
             let song = data.item.name;
             if(song.includes("(feat."))

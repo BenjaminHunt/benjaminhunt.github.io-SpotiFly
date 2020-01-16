@@ -13,6 +13,8 @@ Core functionality:
 - Disable Autoplay?
 
 Goals:
+- Reveal Answer button!
+- remove answers at top. maybe have debug mode?
 - Function that focuses unanswered fields
 - Replace breaks with css spacing/padding
 - Track Progression Bar, timer
@@ -34,8 +36,8 @@ Bugs/Improvement:
 - If song ends, next song plays automatically and song does not update
 :) Song updates too late when played on web page (when "next song" clicked, doesn't update until clicked again)
     --> resolved with promises
-:) let song = data.item.name; => Sometimes undefined??
-    --> not all requests have a response
+:( let song = data.item.name; => Sometimes undefined??
+    --> Thought fixed,  but it isn't. Within update track function that has its own call
 
 
 Other ideas:
