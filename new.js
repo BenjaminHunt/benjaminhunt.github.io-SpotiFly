@@ -9,6 +9,7 @@ function evaluate_answers(){
 }
 
 function guess_song(event) {
+    let correct = false;
     let answer = document.song;
     let state_val = '';
     let x = event.code;
@@ -19,14 +20,31 @@ function guess_song(event) {
     else if(x === "Enter"){
         let guess = document.getElementById("song_guess").value.toLowerCase();
         if(guess === answer.toLowerCase()){
-            state_val = ':)';
+            correct = true;
+        }else if(answer.includes('(') && answer.includes(')')){
+            let pos_a = answer.lastIndexOf('(');
+            let pos_b = answer.lastIndexOf(')');
+            if(pos_b < pos_a){
+                state_val = ':(';
+            }
+            let primary = answer.substr(0, pos_a - 1).toLowerCase();
+            let secondary = answer.substr(pos_a + 1, (pos_b - 1) - pos_a).toLowerCase();
+            console.log(secondary);
+            if([primary, secondary].includes(guess))
+                correct = true;
+            else
+                state_val = ':(';
+        }else
+            state_val = ':(';
+    }
+    if(correct){
+        state_val = ':)';
             document.getElementById("song_guess").value = answer;
             document.getElementById("song_guess").disabled = true;
             document.getElementById("artist_guess").focus();
             evaluate_answers();
-        }else
-            state_val = ':(';
     }
+
     document.getElementById("song_state").innerHTML = state_val;
 }
 
