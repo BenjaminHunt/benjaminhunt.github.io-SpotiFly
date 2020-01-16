@@ -6,7 +6,7 @@ window.onSpotifyWebPlaybackSDKReady = async () => {
     update_track();
 };
 
-function evaluate_answers(){
+evaluate_answers = () => {
     if(
         document.getElementById("song_guess").disabled === true
         && document.getElementById("artist_guess").disabled === true
@@ -14,9 +14,9 @@ function evaluate_answers(){
     ){
         document.getElementById("album_cover").classList.remove("album_covered");
     }
-}
+};
 
-function guess_song(event) {
+guess_song = (event) => {
     let correct = false;
     let answer = document.song;
     let state_val = '';
@@ -54,9 +54,9 @@ function guess_song(event) {
     }
 
     document.getElementById("song_state").innerHTML = state_val;
-}
+};
 
-function guess_artist(event) {
+guess_artist = (event) => {
     let answer = document.artists;
     let answer_lc = [];
     for(let i = 0; i < answer.length; i++){
@@ -80,9 +80,9 @@ function guess_artist(event) {
             state_val = ':(';
     }
     document.getElementById("artist_state").innerHTML = state_val;
-}
+};
 
-function guess_album(event) {
+guess_album = (event) => {
     let answer = document.album;
     let state_val = '';
     let x = event.code;
@@ -101,13 +101,13 @@ function guess_album(event) {
             state_val = ':(';
     }
     document.getElementById("album_state").innerHTML = state_val;
-}
+};
 
-function get_player_name() {
+get_player_name = () => {
     return "SpotiFly Game";
-}
+};
 
-async function start_player(token) {
+start_player = async (token) => {
     return new Promise((resolve, reject) => {
         const player = new Spotify.Player({
         name: get_player_name(),
@@ -138,9 +138,9 @@ async function start_player(token) {
         // Connect to the player!
         player.connect();
     });
-}
+};
 
-function auth() {
+auth = () => {
   // Get the hash of the url
   const hash = window.location.hash
   .substring(1)
@@ -179,25 +179,25 @@ function auth() {
   }
   document.token = _token;
   return _token;
-}
+};
 
-function parse_artists(artists, length){
+parse_artists = (artists, length) => {
     let names = [];
     for(let i = 0; i<length; i++){
         names.push(artists[i].name);
     }
     return names;
-}
+};
 
-function get_artists_str(artists){
+get_artists_str = (artists) => {
     if(artists.length === 1){
         return "artist: " + artists[0];
     }else {
         return "artists: " + artists.join(", ");
     }
-}
+};
 
-function send_simple_request(method, url_param) {
+send_simple_request = (method, url_param) => {
     $.ajax({
         type: method,
         url: url_param,
@@ -213,9 +213,9 @@ function send_simple_request(method, url_param) {
             setTimeout(function(){update_track()}, 500);
         }
     });
-}
+};
 
-function send_simple_request_with_pay(method, url_param, payload, is_async) {
+send_simple_request_with_pay = (method, url_param, payload, is_async) => {
     $.ajax({
         type: method,
         url: url_param,
@@ -229,9 +229,9 @@ function send_simple_request_with_pay(method, url_param, payload, is_async) {
             console.log(data);
         }
     });
-}
+};
 
-function track_mismatch(){
+track_mismatch = () => {
     return (
         (document.getElementById("song_guess").disabled
             && document.getElementById("song_guess").value !== document.song)
@@ -240,9 +240,9 @@ function track_mismatch(){
         ||(document.getElementById("album_guess").disabled
             && document.getElementById("album_guess").value !== document.album)
         )
-}
+};
 
-function update_track(){
+update_track = () => {
     $.ajax({
         url: "https://api.spotify.com/v1/me/player/currently-playing",
         beforeSend: function(xhr) {
@@ -281,32 +281,32 @@ function update_track(){
             }
         }
     });
-}
+};
 
-function pause_song(){
+pause_song = () => {
     document.getElementById("pause").innerHTML = "RESUME";
     send_simple_request("PUT", "https://api.spotify.com/v1/me/player/pause");
-}
+};
 
-function resume_song(){
+resume_song = () => {
     document.getElementById("pause").innerHTML = "PAUSE";
     send_simple_request("PUT", "https://api.spotify.com/v1/me/player/play");
-}
+};
 
-function pause_resume_song(){
+pause_resume_song = () => {
     let text = document.getElementById("pause").innerHTML;
     if(text == "PAUSE")
         pause_song();
     else
         resume_song();
-}
+};
 
-function next_song(){
+next_song = () => {
     send_simple_request("POST", "https://api.spotify.com/v1/me/player/next");
     reset_guessing_fields();
-}
+};
 
-function play_this_browser(){
+play_this_browser = () => {
     return new Promise((resolve, reject) => {
         const url_param = "https://api.spotify.com/v1/me/player";
         const payload = {"device_ids":[document.player_id]};
@@ -314,9 +314,9 @@ function play_this_browser(){
         send_simple_request_with_pay("PUT", url_param, payload, true);
         resolve("playing in this browser!");
     });
-}
+};
 
-function reset_guessing_fields(){
+reset_guessing_fields = () => {
     let empty_str = "";
     document.getElementById("song_state").innerHTML = empty_str;
     document.getElementById("artist_state").innerHTML = empty_str;
@@ -329,8 +329,8 @@ function reset_guessing_fields(){
     document.getElementById("album_guess").disabled = false;
     document.getElementById("song_guess").focus();
     document.getElementById("album_cover").classList.add("album_covered");
-}
+};
 
-function calculate_end_song(){
+calculate_end_song = () => {
     return null;
-}
+};
