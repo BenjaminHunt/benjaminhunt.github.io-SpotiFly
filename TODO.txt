@@ -40,5 +40,5 @@ Bugs/Improvement:
 
 Other ideas:
 - Parcels => enable hot modulation (tool)
-- Node.js/React.js
+- Reducts/React.js
 - swap to vscode

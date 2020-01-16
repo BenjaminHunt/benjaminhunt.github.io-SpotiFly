@@ -3,7 +3,7 @@ window.onSpotifyWebPlaybackSDKReady = async () => {
     let x = await start_player(token);
     console.log(x);
     await play_this_browser();
-    update_track();
+    await resume_song();
 };
 
 evaluate_answers = () => {
@@ -37,7 +37,6 @@ guess_song = (event) => {
             }
             let primary = answer.substr(0, pos_a - 1).toLowerCase();
             let secondary = answer.substr(pos_a + 1, (pos_b - 1) - pos_a).toLowerCase();
-            console.log(secondary);
             if([primary, secondary].includes(guess))
                 correct = true;
             else
@@ -121,7 +120,10 @@ start_player = async (token) => {
         player.addListener('playback_error', ({ message }) => { console.error(message); });
 
         // Playback status updates
-        player.addListener('player_state_changed', state => { console.log(state); });
+        player.addListener('player_state_changed', state => {
+            console.log(state);
+            process_state_change(state);
+        });
 
         // Ready
         player.addListener('ready', ({ device_id }) => {
@@ -210,7 +212,6 @@ send_simple_request = (method, url_param) => {
                 console.log(data);
             else
                 console.log("no data");
-            setTimeout(function(){update_track()}, 500);
         }
     });
 };
@@ -329,6 +330,18 @@ reset_guessing_fields = () => {
     document.getElementById("album_guess").disabled = false;
     document.getElementById("song_guess").focus();
     document.getElementById("album_cover").classList.add("album_covered");
+};
+
+process_state_change = (state) => {
+    let pos = state.position;
+    let dur = state.duration;
+    let is_paused = state.paused;
+    // console.log("pos: (" + pos + "/" + dur + ") ms");
+    // console.log("paused: "+ is_paused);
+    if(pos === 0)
+        update_track();
+    // else schedule next update
+    // reset_guessing_fields()
 };
 
 calculate_end_song = () => {
