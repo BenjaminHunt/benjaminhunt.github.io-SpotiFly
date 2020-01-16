@@ -1,8 +1,11 @@
 TODO List for this app:
 
+Shortlist:
+- Accept track nicknames, ignores (Text) at end of albums
+-
+
 Core functionality:
 - Next song calculations
-
 - Page Progression (not all on new.html)
 - View/Select Personal Playlists after  (use css flex for display)
 - Submit a Playlist link
@@ -28,7 +31,7 @@ Goals:
 
 Bugs/Improvement:
 :) on "update track" with new song, reset guessing fields, reblur song
-- album/artist code improvements (i.e. "==" to "===")
+:) album/artist code improvements (i.e. "==" to "===")
 - Promise for next song/update song THEN unlock fields
 - If "next song" selected while paused, will play automatically. Button SHOULD display "PAUSE" but doesn't
 - If song is updated externally, song display doesn't update
