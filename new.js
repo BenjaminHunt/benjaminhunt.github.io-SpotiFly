@@ -1,14 +1,18 @@
 function evaluate_answers(){
-    // Check which answers are correct
-    // All Correct => unblur
-    // Not All Correct => Forward item.focus appropriately
+    if(
+        document.getElementById("song_guess").disabled === true
+        && document.getElementById("artist_guess").disabled === true
+        && document.getElementById("album_guess").disabled === true
+    ){
+
+        document.getElementById("album_cover").classList.remove("album_covered");
+    }
 }
 
 function guess_song(event) {
     let answer = document.song;
     let state_val = '';
     let x = event.code;
-    console.log(x);
     if(x === "Backspace")
          state_val= '';
     else if(x === "Tab")
@@ -20,7 +24,7 @@ function guess_song(event) {
             document.getElementById("song_guess").value = answer;
             document.getElementById("song_guess").disabled = true;
             document.getElementById("artist_guess").focus();
-            document.getElementById("album_cover").classList.remove("album_covered");
+            evaluate_answers();
         }else
             state_val = ':(';
     }
@@ -28,25 +32,25 @@ function guess_song(event) {
 }
 
 function guess_artist(event) {
-    //TODO: Account for multiple artists
     let answer = document.artists;
-    let answer_lc = []
+    let answer_lc = [];
     for(let i = 0; i < answer.length; i++){
         answer_lc.push(answer[i].toLowerCase());
     }
     let state_val = '';
-    let x = event.keyCode;
-    if(x == 8)
+    let x = event.code;
+    if(x === "Backspace")
          state_val= '';
-    if(x == 9)
+    if(x === "Tab")
         return null;
-    if(x == 13) {
+    if(x === "Enter") {
         let guess = document.getElementById("artist_guess").value.toLowerCase();
         if (answer_lc.includes(guess)) {
             document.getElementById("artist_guess").value = answer.join(', ');
             document.getElementById("artist_guess").disabled = true;
             document.getElementById("album_guess").focus();
             state_val = ':)';
+            evaluate_answers();
         }else
             state_val = ':(';
     }
@@ -56,17 +60,18 @@ function guess_artist(event) {
 function guess_album(event) {
     let answer = document.album;
     let state_val = '';
-    let x = event.keyCode;
-    if(x == 8)
+    let x = event.code;
+    if(x === "Backspace")
          state_val= '';
-    if(x == 9)
+    if(x === "Tab")
         return null;
-    if(x == 13){
+    if(x === "Enter"){
         let guess = document.getElementById("album_guess").value.toLowerCase();
         if(answer.toLowerCase() == guess) {
             document.getElementById("album_guess").value = answer;
             document.getElementById("album_guess").disabled = true;
             state_val = ':)';
+            evaluate_answers();
         }else
             state_val = ':(';
     }
@@ -115,8 +120,6 @@ async function start_player(token) {
 
         // Connect to the player!
         player.connect();
-
-        document.getElementById("header1").innerHTML = "Check Your Spotify App for \"" + get_player_name() + "\"";
     });
 }
 
@@ -211,6 +214,19 @@ function send_simple_request_with_pay(method, url_param, payload, is_async) {
     });
 }
 
+function track_mismatch(){
+    console.log(document.getElementById("song_guess").innerText);
+    console.log(document.song);
+    return (
+        (document.getElementById("song_guess").disabled
+            && document.getElementById("song_guess").value !== document.song)
+        ||(document.getElementById("artist_guess").disabled
+            && document.getElementById("artist_guess").value !== document.artists)
+        ||(document.getElementById("album_guess").disabled
+            && document.getElementById("album_guess").value !== document.album)
+        )
+}
+
 function update_track(){
     $.ajax({
         url: "https://api.spotify.com/v1/me/player/currently-playing",
@@ -219,6 +235,8 @@ function update_track(){
             xhr.setRequestHeader("Accept", "application/json");
             xhr.setRequestHeader("Content-Type", "application/json");
         }, success: function(data){
+            if(!data)
+                console.log("request complete.");
             console.log(data);
 
             let song = data.item.name;
@@ -241,6 +259,10 @@ function update_track(){
             document.song = song;
             document.artists = artists;
             document.album = album;
+
+            if(track_mismatch()){
+                reset_guessing_fields();
+            }
         }
     });
 }

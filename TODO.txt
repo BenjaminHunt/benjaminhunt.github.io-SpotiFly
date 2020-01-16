@@ -1,8 +1,6 @@
 TODO List for this app:
 
 Core functionality:
-:) Remove Ajax Sync Behavior. Replace with await/promises/then solution
-:) Play on Web Page Automatically
 - Next song calculations
 
 - Page Progression (not all on new.html)
@@ -11,7 +9,6 @@ Core functionality:
 - Shuffle & Play <x> songs
 :/ Auto-update Album Cover, song information
     --> not perfect, but kinda works (only on "next song" click")
-:) Blur Album Cover
 - Unblur after correct guesses
 - Disable Autoplay?
 
@@ -29,14 +26,16 @@ Goals:
 - Determine if song should automatically play when starts on web browser
 
 Bugs/Improvement:
-- on "update song" with new song, reset guessing fields, reblur song
+:) on "update track" with new song, reset guessing fields, reblur song
 - album/artist code improvements (i.e. "==" to "===")
 - Promise for next song/update song THEN unlock fields
 - If "next song" selected while paused, will play automatically. Button SHOULD display "PAUSE" but doesn't
 - If song is updated externally, song display doesn't update
 - If song ends, next song plays automatically and song does not update
-- Song updates too late when played on web page (when "next song" clicked, doesn't update until clicked again)
-- let song = data.item.name; => Sometimes undefined??
+:) Song updates too late when played on web page (when "next song" clicked, doesn't update until clicked again)
+    --> resolved with promises
+:) let song = data.item.name; => Sometimes undefined??
+    --> not all requests have a response
 
 
 Other ideas:
