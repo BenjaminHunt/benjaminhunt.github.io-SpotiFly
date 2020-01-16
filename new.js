@@ -4,7 +4,6 @@ function evaluate_answers(){
         && document.getElementById("artist_guess").disabled === true
         && document.getElementById("album_guess").disabled === true
     ){
-
         document.getElementById("album_cover").classList.remove("album_covered");
     }
 }
@@ -32,6 +31,7 @@ function guess_song(event) {
 }
 
 function guess_artist(event) {
+    console.log("GUESS: " + document.artist);
     let answer = document.artists;
     let answer_lc = [];
     for(let i = 0; i < answer.length; i++){
@@ -173,7 +173,7 @@ function parse_artists(artists, length){
 }
 
 function get_artists_str(artists){
-    if(artists.length == 1){
+    if(artists.length === 1){
         return "artist: " + artists[0];
     }else {
         return "artists: " + artists.join(", ");
@@ -215,13 +215,11 @@ function send_simple_request_with_pay(method, url_param, payload, is_async) {
 }
 
 function track_mismatch(){
-    console.log(document.getElementById("song_guess").innerText);
-    console.log(document.song);
     return (
         (document.getElementById("song_guess").disabled
             && document.getElementById("song_guess").value !== document.song)
         ||(document.getElementById("artist_guess").disabled
-            && document.getElementById("artist_guess").value !== document.artists)
+            && document.getElementById("artist_guess").value !== document.artists.join(", "))
         ||(document.getElementById("album_guess").disabled
             && document.getElementById("album_guess").value !== document.album)
         )
