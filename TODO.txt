@@ -2,7 +2,7 @@ TODO List for this app:
 
 Shortlist:
 - Accept track nicknames, ignores (Text) at end of albums
--
+- End of song calculator/timer/stopwatch
 
 Core functionality:
 - Next song calculations
