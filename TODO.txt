@@ -9,8 +9,7 @@ Core functionality:
 - Shuffle & Play <x> songs
 :/ Auto-update Album Cover, song information
     --> not perfect, but kinda works (only on "next song" click")
-- Unblur after correct guesses
-- Disable Autoplay?
+:) Unblur after correct guesses
 
 Goals:
 - Reveal Answer button!
@@ -34,8 +33,6 @@ Bugs/Improvement:
 - If "next song" selected while paused, will play automatically. Button SHOULD display "PAUSE" but doesn't
 - If song is updated externally, song display doesn't update
 - If song ends, next song plays automatically and song does not update
-:) Song updates too late when played on web page (when "next song" clicked, doesn't update until clicked again)
-    --> resolved with promises
 :( let song = data.item.name; => Sometimes undefined??
     --> Thought fixed,  but it isn't. Within update track function that has its own call
 

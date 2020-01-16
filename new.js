@@ -31,7 +31,6 @@ function guess_song(event) {
 }
 
 function guess_artist(event) {
-    console.log("GUESS: " + document.artist);
     let answer = document.artists;
     let answer_lc = [];
     for(let i = 0; i < answer.length; i++){
