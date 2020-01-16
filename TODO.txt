@@ -10,7 +10,7 @@ Core functionality:
 - Submit a Playlist link
 - Shuffle & Play <x> songs
 :/ Auto-update Album Cover, song information
-    --> not perfect, but kinda works (only on "next song" click")
+    --> not perfect, doesn't work on and end-of-song progression to next song
 - support "basically correct" answers => songs existing on singles and LPs, etc
 
 Goals:
