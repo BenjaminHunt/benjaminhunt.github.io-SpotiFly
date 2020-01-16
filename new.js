@@ -304,7 +304,6 @@ function pause_resume_song(){
 function next_song(){
     send_simple_request("POST", "https://api.spotify.com/v1/me/player/next");
     reset_guessing_fields();
-    document.getElementById("album_cover").classList.add("album_covered");
 }
 
 function play_this_browser(){
@@ -329,6 +328,7 @@ function reset_guessing_fields(){
     document.getElementById("artist_guess").disabled = false;
     document.getElementById("album_guess").disabled = false;
     document.getElementById("song_guess").focus();
+    document.getElementById("album_cover").classList.add("album_covered");
 }
 
 function calculate_end_song(){
