@@ -1,4 +1,4 @@
-Timer = (callback, delay) => {
+function Timer(callback, delay){
     let timerId, start, remaining = delay;
 
     this.pause = function() {
@@ -13,7 +13,7 @@ Timer = (callback, delay) => {
     };
 
     this.resume();
-};
+}
 
 window.onSpotifyWebPlaybackSDKReady = async () => {
     let token = auth();
@@ -374,10 +374,12 @@ process_state_change = (state) => {
     // reset_guessing_fields()
 };
 
-
 schedule_update = (pos, dur) => {
     document.update_timer = null;
     let time_ms = dur - pos;
-    document.update_timer = new Timer(update_track(), time_ms + 300);
+    document.update_timer = new Timer(() => {
+        update_track();
+        console.log("Scheduled update complete.");
+    }, time_ms + 300);
     console.log("Update scheduled.");
 };

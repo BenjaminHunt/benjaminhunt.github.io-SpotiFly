@@ -4,6 +4,7 @@ Shortlist:
 :) End of song calculator/timer/stopwatch => set interval
 - String cleaning
 - playlist link support
+- use cookies/local storage
 
 Core functionality:
 :) Next song calculations
@@ -36,6 +37,7 @@ Goals:
 
 Bugs/Improvement:
 - Flickery album updates => multiple updates occurring?
+- Random flickers throughout song?
 - Doesn't load album cover unless spotify is previously playing on another device?
 - If "next song" selected while paused, will play automatically. Button SHOULD display "PAUSE" but doesn't
 :) If song ends, next song plays automatically and song does not update
