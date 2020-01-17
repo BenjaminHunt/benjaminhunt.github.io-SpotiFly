@@ -1,3 +1,20 @@
+Timer = (callback, delay) => {
+    let timerId, start, remaining = delay;
+
+    this.pause = function() {
+        window.clearTimeout(timerId);
+        remaining -= Date.now() - start;
+    };
+
+    this.resume = function() {
+        start = Date.now();
+        window.clearTimeout(timerId);
+        timerId = window.setTimeout(callback, remaining);
+    };
+
+    this.resume();
+};
+
 window.onSpotifyWebPlaybackSDKReady = async () => {
     let token = auth();
     let x = await start_player(token);
@@ -251,31 +268,33 @@ update_track = () => {
             xhr.setRequestHeader("Accept", "application/json");
             xhr.setRequestHeader("Content-Type", "application/json");
         }, success: function(data){
-            if(data)
+            if(data){
                 console.log(data);
+                let song = data.item.name;
+                if(song.includes("(feat."))
+                    song = song.substring(0, song.indexOf("(feat.") - 1);
+                let num_artists = data.item.artists.length;
+                let artists = parse_artists(data.item.artists, num_artists);
+                let album = data.item.album.name;
+                if(album.includes("(feat."))
+                    album = album.substring(0, album.indexOf("(feat.") - 1);
+                let album_cover = data.item.album.images[0].url;
+
+                document.getElementById("song_name").innerHTML =
+                    "<br>song: " + song +
+                    "<br>" + get_artists_str(artists) +
+                    "<br>album: " + album;
+                document.getElementById("album_cover").innerHTML = "<img src=\"" +
+                    album_cover + "\" height=\"450\" width=\"auto\">";
+
+                document.pos = data.progress_ms;
+
+                document.song = song;
+                document.artists = artists;
+                document.album = album;
+            }
             else
                 console.log("No return data.");
-
-            let song = data.item.name;
-            if(song.includes("(feat."))
-                song = song.substring(0, song.indexOf("(feat.") - 1);
-            let num_artists = data.item.artists.length;
-            let artists = parse_artists(data.item.artists, num_artists);
-            let album = data.item.album.name;
-            if(album.includes("(feat."))
-                album = album.substring(0, album.indexOf("(feat.") - 1);
-            let album_cover = data.item.album.images[0].url;
-
-            document.getElementById("song_name").innerHTML =
-                "<br>song: " + song +
-                "<br>" + get_artists_str(artists) +
-                "<br>album: " + album;
-            document.getElementById("album_cover").innerHTML = "<img src=\"" +
-                album_cover + "\" height=\"450\" width=\"auto\">";
-
-            document.song = song;
-            document.artists = artists;
-            document.album = album;
 
             if(track_mismatch()){
                 reset_guessing_fields();
@@ -287,11 +306,19 @@ update_track = () => {
 pause_song = () => {
     document.getElementById("pause").innerHTML = "RESUME";
     send_simple_request("PUT", "https://api.spotify.com/v1/me/player/pause");
+    if(document.update_timer) {
+        document.update_timer.pause();
+        console.log("Song and scheduled update paused.");
+    }
 };
 
 resume_song = () => {
     document.getElementById("pause").innerHTML = "PAUSE";
     send_simple_request("PUT", "https://api.spotify.com/v1/me/player/play");
+    if(document.update_timer) {
+        document.update_timer.resume();
+        console.log("Song and scheduled update resumed.");
+    }
 };
 
 pause_resume_song = () => {
@@ -334,16 +361,23 @@ reset_guessing_fields = () => {
 
 process_state_change = (state) => {
     let pos = state.position;
+    document.pos = pos;
     let dur = state.duration;
     let is_paused = state.paused;
     // console.log("pos: (" + pos + "/" + dur + ") ms");
     // console.log("paused: "+ is_paused);
-    if(pos === 0)
+    if(pos === 0 || pos < document.pos) {
         update_track();
+    }
+    schedule_update(pos, dur);
     // else schedule next update
     // reset_guessing_fields()
 };
 
-calculate_end_song = () => {
-    return null;
+
+schedule_update = (pos, dur) => {
+    document.update_timer = null;
+    let time_ms = dur - pos;
+    document.update_timer = new Timer(update_track(), time_ms + 300);
+    console.log("Update scheduled.");
 };
