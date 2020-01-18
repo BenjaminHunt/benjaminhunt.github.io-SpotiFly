@@ -7,4 +7,6 @@
 (EP)
 (Special Edition)
 (Live Sessions)
+(Live Session)
 (Live from xxx)
+:Reloaded

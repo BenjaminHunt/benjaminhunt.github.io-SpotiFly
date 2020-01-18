@@ -28,18 +28,21 @@
     </div>
     <table style="text-align: center">
       <tr>
-        <th align="right">Song</th>
-        <th align="left"><input type="text" id="song_guess" name="song title" onkeydown="return guess_song(event)"></th>
+        <th align="right" class="guess_label">Song</th>
+        <th align="left"><input type="text" id="song_guess" class="guess"
+                                name="song title" onkeydown="return guess_song(event)"></th>
         <th id="song_state"></th>
       </tr>
       <tr>
-        <th align="right">Artist</th>
-        <th align="left"><input type="text" id="artist_guess" name="artist's name" onkeydown="return guess_artist(event)"></th>
+        <th align="right" class="guess_label">Artist</th>
+        <th align="left"><input type="text" id="artist_guess" class="guess"
+                                name="artist's name" onkeydown="return guess_artist(event)"></th>
         <th id="artist_state"></th>
       </tr>
       <tr>
-        <th align="right">Album</th>
-        <th align="left"><input type="text" id="album_guess" name="album name" onkeydown="return guess_album(event)"></th>
+        <th align="right" class="guess_label">Album</th>
+        <th align="left"><input type="text" id="album_guess" class="guess"
+                                name="album name" onkeydown="return guess_album(event)"></th>
         <th id="album_state"></th>
       </tr>
     </table>

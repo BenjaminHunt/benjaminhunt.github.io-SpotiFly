@@ -1,25 +1,22 @@
 TODO List for this app:
 
 Shortlist:
-:) End of song calculator/timer/stopwatch => set interval
 - playlist link support
-- String cleaning
+:) String cleaning
 - use cookies/local storage
+- single as answer for single releases AND/OR album lookups
 
 Core functionality:
-:) Next song calculations
 - Page Progression (not all on new.html)
 - View/Select Personal Playlists after  (use css flex for display)
 - Submit a Playlist link
 - Shuffle & Play <x> songs
-:) Auto-update Album Cover, song information
-    --> works with current functionality
 
 Answer formatting:
-- support "basically correct" answers => songs existing on singles and LPs, etc
+:) support "basically correct" answers => songs existing on singles and LPs, etc => Improvement item added
 - Hemming Distance for awkward song spelling (i.e. worst nites => worst nights)
-- String Standardization/Cleaning (i.e. remove "(Deluxe)" from album names)
-- Handle Special Characters
+:) String Standardization/Cleaning (i.e. remove "(Deluxe)" from album names) => Improvement item added
+:) Handle Special Characters => Improvement item added
 
 Goals:
 - Reveal Answer button!
@@ -36,14 +33,19 @@ Goals:
 - Determine if song should automatically play when starts on web browser
 
 Bugs/Improvement:
-- Flickery album updates => multiple updates occurring?
-- Random flickers throughout song?
-- Doesn't load album cover unless spotify is previously playing on another device?
+- Verify "tag_text" in clean_album name is excessive
+- if by some chance the same song plays twice in a row, I do not believe the song updates properly. does not on click. maybe use ID for this?
+    => should only schedule update on a TRUE pause
+- Flickery album updates => multiple updates occurring? Random flickers throughout song? => Multiple update timers set.
+- *** Doesn't load album cover on startup unless spotify is previously playing on another device? Now not at all?
 - If "next song" selected while paused, will play automatically. Button SHOULD display "PAUSE" but doesn't
-:) If song ends, next song plays automatically and song does not update
 - Consider: Pause after end of song => manual continues OR repeat song
-:( let song = data.item.name; => Sometimes undefined??
+- let song = data.item.name; => Sometimes undefined??
     --> Thought fixed,  but it isn't. Within update track function that has its own call
+    --> I BELIEVE if we fix initial song behavior, this will be fixed
+- Less hacky special character substitution
+- Album lookups for singles, and for expansion albums
+- Update song state event gives like 3 alerts => Detect which are pauses, resumes, skips, etc. behave appropriately.
 
 Other ideas:
 - Parcels => enable hot modulation (tool)

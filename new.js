@@ -12,6 +12,15 @@ function Timer(callback, delay){
         timerId = window.setTimeout(callback, remaining);
     };
 
+    this.get_time_remaining = function(){
+        return remaining;
+    };
+
+    this.reset_timer = function(delay){
+        remaining = delay;
+        this.resume();
+    };
+
     this.resume();
 }
 
@@ -20,7 +29,8 @@ window.onSpotifyWebPlaybackSDKReady = async () => {
     let x = await start_player(token);
     console.log(x);
     await play_this_browser();
-    await resume_song();
+    await resume_song(); // do i want to?
+    update_track(); // doesn't work here?
 };
 
 evaluate_answers = () => {
@@ -33,18 +43,64 @@ evaluate_answers = () => {
     }
 };
 
+guess_matches_enough = (guess, answer) => {
+    guess = guess.toLowerCase();
+    answer = answer.toLowerCase();
+
+    //and substitution
+    if(answer.includes("+") || answer.includes("&") || answer.includes("and")){
+        answer = answer.replace("+", "&");
+        answer = answer.replace("&", " & ");
+        answer = answer.replace("&", "and");
+        answer = answer.replace(/\s+/g,' ').trim();answer = answer.replace("+", "&");
+        guess = guess.replace("&", " & ");
+        guess = guess.replace("&", "and");
+        guess = guess.replace(/\s+/g,' ').trim();
+        console.log("GUESS: " + guess);
+        console.log("ACCEPT: " + answer);
+    }
+    if(guess === answer){
+        return true;
+    }else{
+        let correct = true;
+        answer = answer.replace(/[^!@&#$?()/=% a-zA-Z0-9]/g, "*");
+        let i;
+        for(i = 0; i < guess.length; i++){
+            if(!(guess[i] === answer[i] || answer[i] === "*")){
+                correct = false;
+            }
+        }
+        return correct;
+    }
+};
+
+clean_album_name = (album) => {
+    let album_trimmed = album;
+    let tag_text = false;
+    if(album.includes('(') && album.includes(')')){
+        let pos_a = album.lastIndexOf('(');
+        let pos_b = album.lastIndexOf(')');
+        if(pos_b > pos_a){
+            album_trimmed = album.substr(0, pos_a - 1);
+            tag_text = album.substr(pos_a + 1, (pos_b - 1) - pos_a); //TODO: Maybe verify its excessive?
+        }
+        return album_trimmed;
+    }
+    return album;
+};
+
 guess_song = (event) => {
     let correct = false;
-    let answer = document.song;
     let state_val = '';
+    let answer = document.song;
     let x = event.code;
     if(x === "Backspace")
          state_val= '';
     else if(x === "Tab")
         return null;
     else if(x === "Enter"){
-        let guess = document.getElementById("song_guess").value.toLowerCase();
-        if(guess === answer.toLowerCase()){
+        let guess = document.getElementById("song_guess").value;
+        if(guess_matches_enough(guess, answer)){
             correct = true;
         }else if(answer.includes('(') && answer.includes(')')){
             let pos_a = answer.lastIndexOf('(');
@@ -52,9 +108,9 @@ guess_song = (event) => {
             if(pos_b < pos_a){
                 state_val = ':(';
             }
-            let primary = answer.substr(0, pos_a - 1).toLowerCase();
-            let secondary = answer.substr(pos_a + 1, (pos_b - 1) - pos_a).toLowerCase();
-            if([primary, secondary].includes(guess))
+            let primary = answer.substr(0, pos_a - 1);
+            let secondary = answer.substr(pos_a + 1, (pos_b - 1) - pos_a);
+            if(guess_matches_enough(primary, answer) || guess_matches_enough(secondary, answer))
                 correct = true;
             else
                 state_val = ':(';
@@ -73,48 +129,60 @@ guess_song = (event) => {
 };
 
 guess_artist = (event) => {
-    let answer = document.artists;
-    let answer_lc = [];
-    for(let i = 0; i < answer.length; i++){
-        answer_lc.push(answer[i].toLowerCase());
-    }
+    let correct = false;
     let state_val = '';
+    let answer = document.artists;
     let x = event.code;
     if(x === "Backspace")
          state_val= '';
     if(x === "Tab")
         return null;
     if(x === "Enter") {
-        let guess = document.getElementById("artist_guess").value.toLowerCase();
-        if (answer_lc.includes(guess)) {
-            document.getElementById("artist_guess").value = answer.join(', ');
-            document.getElementById("artist_guess").disabled = true;
-            document.getElementById("album_guess").focus();
-            state_val = ':)';
-            evaluate_answers();
-        }else
+        let guess = document.getElementById("artist_guess").value;
+        answer.forEach(artist => {
+            if(guess_matches_enough(guess, artist)){
+                correct = true;
+            }
+        });
+        if(!correct)
             state_val = ':(';
+    }
+
+    if(correct){
+        document.getElementById("artist_guess").value = answer.join(', ');
+        document.getElementById("artist_guess").disabled = true;
+        document.getElementById("album_guess").focus();
+        state_val = ':)';
+        evaluate_answers();
     }
     document.getElementById("artist_state").innerHTML = state_val;
 };
 
 guess_album = (event) => {
-    let answer = document.album;
+    let correct = false;
     let state_val = '';
+    // let answer = clean_album_name(document.album); //TODO: Do I want to remove excess tags here?
+    let answer = [document.album, clean_album_name(document.album)];
     let x = event.code;
     if(x === "Backspace")
          state_val= '';
     if(x === "Tab")
         return null;
     if(x === "Enter"){
-        let guess = document.getElementById("album_guess").value.toLowerCase();
-        if(answer.toLowerCase() == guess) {
-            document.getElementById("album_guess").value = answer;
-            document.getElementById("album_guess").disabled = true;
-            state_val = ':)';
-            evaluate_answers();
-        }else
+        let guess = document.getElementById("album_guess").value;
+        answer.forEach(accepted_album_name => {
+            if(guess_matches_enough(guess, accepted_album_name)){
+                correct = true;
+            }
+        });
+        if(!correct)
             state_val = ':(';
+    }
+    if(correct){
+        document.getElementById("album_guess").value = document.album;
+        document.getElementById("album_guess").disabled = true;
+        state_val = ':)';
+        evaluate_answers();
     }
     document.getElementById("album_state").innerHTML = state_val;
 };
@@ -375,11 +443,16 @@ process_state_change = (state) => {
 };
 
 schedule_update = (pos, dur) => {
-    document.update_timer = null;
+    // document.update_timer = null;
     let time_ms = dur - pos;
-    document.update_timer = new Timer(() => {
-        update_track();
-        console.log("Scheduled update complete.");
-    }, time_ms + 300);
-    console.log("Update scheduled.");
+    if(!document.update_timer){
+        document.update_timer = new Timer(() => {
+            update_track();
+            console.log("Scheduled update created.");
+        }, time_ms + 300);
+    }
+    else{
+        document.update_timer.reset_timer(time_ms);
+        console.log("Update Timer Set.");
+    }
 };

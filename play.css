@@ -34,18 +34,22 @@ table {
     table-layout: auto;
 }
 
-th {
-    font-size: 20px;
+.guess_label {
     font-weight: bold;
 }
-
-input[type=text] {
+.guess {
+    font-size: 20px;
+    /*font-weight: bold;*/
     height: 30px;
     width: 95%;
     background-color: honeydew;
     color: black;
     font-size: 20px;
     padding: 5px;
+}
+
+input[type=text] {
+
 }
 input[type=text]:focus {
     background-color: lightcyan;
