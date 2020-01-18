@@ -2,8 +2,8 @@ TODO List for this app:
 
 Shortlist:
 :) End of song calculator/timer/stopwatch => set interval
-- String cleaning
 - playlist link support
+- String cleaning
 - use cookies/local storage
 
 Core functionality:
