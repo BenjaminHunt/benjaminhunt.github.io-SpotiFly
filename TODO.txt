@@ -33,6 +33,7 @@ Goals:
 - Prepare next song in que for seamless album/info updates.
 
 Bugs/Improvement:
+- End of song updates are a little off
 - Album lookups for singles, and for expansion albums
 :) awaits using "send_simple_request" aren't true promises. sends request, doesn't wait for response.
 - Verify "tag_text" in clean_album name is excessive

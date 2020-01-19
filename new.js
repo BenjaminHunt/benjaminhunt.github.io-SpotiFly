@@ -330,6 +330,13 @@ send_simple_request_with_pay = (method, url_param, payload) => {
     });
 };
 
+display_song_info = () => {
+    document.getElementById("song_name").innerHTML =
+        "<br>song: " + document.song +
+        "<br>" + get_artists_str(document.artists) +
+        "<br>album: " + document.album;
+};
+
 track_mismatch = () => {
     return (
         (document.getElementById("song_guess").disabled
@@ -355,20 +362,15 @@ update_track = () => {
 
                 let num_artists = data.item.artists.length;
                 let artists = parse_artists(data.item.artists, num_artists);
-                let album = data.item.album.name;
-                if(album.includes("(feat."))
-                    album = album.substring(0, album.indexOf("(feat.") - 1);
+                let album = clean_song_name(data.item.album.name); //to handle "ft." in singles, etc.
                 let album_cover = data.item.album.images[0].url;
 
-                document.getElementById("song_name").innerHTML =
-                    "<br>song: " + song +
-                    "<br>" + get_artists_str(artists) +
-                    "<br>album: " + album;
+                display_song_info();
+
                 document.getElementById("album_cover").innerHTML = "<img src=\"" +
                     album_cover + "\" height=\"450\" width=\"auto\">";
 
                 document.pos = data.progress_ms;
-
                 document.song = song;
                 document.artists = artists;
                 document.album = album;
@@ -461,10 +463,10 @@ schedule_update = (pos, dur) => {
         document.update_timer = new Timer(() => {
             update_track();
             console.log("Scheduled update created.");
-        }, time_ms + 500);
+        }, time_ms + 750);
     }
     else{
-        document.update_timer.reset_timer(time_ms + 500);
+        document.update_timer.reset_timer(time_ms + 750);
         console.log("Update Timer Set.");
     }
 };
