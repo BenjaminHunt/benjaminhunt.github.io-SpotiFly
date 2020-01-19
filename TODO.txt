@@ -30,17 +30,13 @@ X Prepare next song in que for seamless album/info updates. => might be good wit
 
 Bugs/Improvement:
 - Remove update_track shizz I don't need anymore
+- Remove update schedule
 - End of song updates are a little off => Scheduling needs to be corrected.
 - Album lookups for singles, and for expansion albums
 - Verify "tag_text" in clean_album name is excessive
-:) if by some chance the same song plays twice in a row, I do not believe the song updates properly. does not on click. maybe use ID for this?
-    => should only schedule update on a TRUE pause
 - Flickery album updates => multiple updates occurring? Random flickers throughout song? => Multiple update timers set.
-:) If "next song" selected while paused, will play automatically. Button SHOULD display "PAUSE" but doesn't
 - Consider: Pause after end of song => manual continues OR repeat song
-:) Update song state event gives like 3 alerts => Detect which are pauses, resumes, skips, etc. behave appropriately.
-    --> Appears to be down to GONE????
-:) Remove excessive console logs. Improve logging content quality. (PROGRESS MADE)
+
 
 Other ideas:
 - Parcels => enable hot modulation (tool)
