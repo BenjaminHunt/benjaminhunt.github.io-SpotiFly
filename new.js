@@ -216,7 +216,7 @@ start_player = async (token) => {
 
         // Playback status updates
         player.addListener('player_state_changed', state => {
-            console.log(state);
+            console.log('state change: ', state);
             process_state_change(state);
         });
 
@@ -331,7 +331,7 @@ send_simple_request_with_pay = (method, url_param, payload) => {
 };
 
 display_song_info = () => {
-    document.getElementById("song_name").innerHTML =
+    document.getElementById("song_info_debug").innerHTML =
         "<br>song: " + document.song +
         "<br>" + get_artists_str(document.artists) +
         "<br>album: " + document.album;
@@ -348,6 +348,80 @@ track_mismatch = () => {
         )
 };
 
+extract_track_id = (data) => {
+    if(data.item)
+        return data.item.id;
+    else if(data.track_window)
+        return data.track_window.current_track.id;
+    return null;
+};
+
+post_playing_update = (data) => {
+    let id = extract_track_id(data);
+    if(id === document.track_id)
+        return;
+
+    //this normalizes state change/update_track for song update
+    if(data.track_window){
+        let item = data.track_window.current_track;
+        data = {
+            'item': item
+        };
+        console.log('>>', data);
+    }
+
+    let song = clean_song_name(data.item.name);
+    let num_artists = data.item.artists.length;
+    let artists = parse_artists(data.item.artists, num_artists);
+    let album = clean_song_name(data.item.album.name); //to handle "ft." in singles, etc.
+    let album_cover = data.item.album.images[0].url;
+
+    document.track_id = id;
+    document.pos = data.progress_ms;
+    document.song = song;
+    document.artists = artists;
+    document.album = album;
+
+    document.getElementById("album_cover").innerHTML = "<img src=\"" +
+        album_cover + "\" height=\"450\" width=\"auto\">";
+
+    display_song_info();
+    reset_guessing_fields();
+};
+
+post_state_update = (data) => {
+    let id = extract_track_id(data);
+    if(id === document.track_id)
+        return;
+
+    //this normalizes state change/update_track for song update
+    if(data.track_window){
+        let item = data.track_window.current_track;
+        data = {
+            'item': item
+        };
+        console.log('>>', data);
+    }
+
+    let song = clean_song_name(data.item.name);
+    let num_artists = data.item.artists.length;
+    let artists = parse_artists(data.item.artists, num_artists);
+    let album = clean_song_name(data.item.album.name); //to handle "ft." in singles, etc.
+    let album_cover = data.item.album.images[0].url;
+
+    document.track_id = id;
+    document.pos = data.progress_ms;
+    document.song = song;
+    document.artists = artists;
+    document.album = album;
+
+    document.getElementById("album_cover").innerHTML = "<img src=\"" +
+        album_cover + "\" height=\"450\" width=\"auto\">";
+
+    display_song_info();
+    reset_guessing_fields();
+};
+
 update_track = () => {
     $.ajax({
         url: "https://api.spotify.com/v1/me/player/currently-playing",
@@ -357,46 +431,27 @@ update_track = () => {
             xhr.setRequestHeader("Content-Type", "application/json");
         }, success: function(data){
             if(data){
-                console.log(data);
-                let song = clean_song_name(data.item.name);
-
-                let num_artists = data.item.artists.length;
-                let artists = parse_artists(data.item.artists, num_artists);
-                let album = clean_song_name(data.item.album.name); //to handle "ft." in singles, etc.
-                let album_cover = data.item.album.images[0].url;
-
-                display_song_info();
-
-                document.getElementById("album_cover").innerHTML = "<img src=\"" +
-                    album_cover + "\" height=\"450\" width=\"auto\">";
-
-                document.pos = data.progress_ms;
-                document.song = song;
-                document.artists = artists;
-                document.album = album;
+                console.log("update_track > ", data);
+                post_playing_update(data);
             }
             else
-                console.log("No return data.");
-
-            if(track_mismatch()){
-                reset_guessing_fields();
-            }
+                console.log("update_track > No return data.");
         }
     });
 };
 
-pause_song = () => {
-    document.getElementById("pause").innerHTML = "RESUME";
-    send_simple_request("PUT", "https://api.spotify.com/v1/me/player/pause");
+pause_song = async () => {
+    await send_simple_request("PUT", "https://api.spotify.com/v1/me/player/pause");
+    document.getElementById("pause").innerHTML = "Resume";
     if(document.update_timer) {
         document.update_timer.pause();
         console.log("Song and scheduled update paused.");
     }
 };
 
-resume_song = () => {
-    document.getElementById("pause").innerHTML = "PAUSE";
-    send_simple_request("PUT", "https://api.spotify.com/v1/me/player/play");
+resume_song = async () => {
+    await send_simple_request("PUT", "https://api.spotify.com/v1/me/player/play");
+    document.getElementById("pause").innerHTML = "Pause";
     if(document.update_timer) {
         document.update_timer.resume();
         console.log("Song and scheduled update resumed.");
@@ -405,7 +460,7 @@ resume_song = () => {
 
 pause_resume_song = () => {
     let text = document.getElementById("pause").innerHTML;
-    if(text == "PAUSE")
+    if(text === "Pause")
         pause_song();
     else
         resume_song();
@@ -437,36 +492,32 @@ reset_guessing_fields = () => {
     document.getElementById("song_guess").disabled = false;
     document.getElementById("artist_guess").disabled = false;
     document.getElementById("album_guess").disabled = false;
-    document.getElementById("song_guess").focus();
     document.getElementById("album_cover").classList.add("album_covered");
+    document.getElementById("song_guess").focus();
 };
 
 process_state_change = (state) => {
     let pos = state.position;
     document.pos = pos;
     let dur = state.duration;
-    let is_paused = state.paused;
-    // console.log("pos: (" + pos + "/" + dur + ") ms");
-    // console.log("paused: "+ is_paused);
-    if(pos === 0 || pos < document.pos) {
-        update_track();
+    if(state.paused){
+        document.getElementById("pause").innerHTML = "Resume";
+    }else{
+        document.getElementById("pause").innerHTML = "Pause";
     }
-    schedule_update(pos, dur);
-    // else schedule next update
-    // reset_guessing_fields()
+    post_state_update(state);
 };
 
 schedule_update = (pos, dur) => {
-    // document.update_timer = null;
     let time_ms = dur - pos;
     if(!document.update_timer){
         document.update_timer = new Timer(() => {
             update_track();
             console.log("Scheduled update created.");
-        }, time_ms + 750);
+        }, time_ms + 1000);
     }
     else{
-        document.update_timer.reset_timer(time_ms + 750);
+        document.update_timer.reset_timer(time_ms + 1000);
         console.log("Update Timer Set.");
     }
 };

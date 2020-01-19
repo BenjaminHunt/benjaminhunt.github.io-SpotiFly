@@ -6,19 +6,14 @@ Shortlist:
 - single as answer for single releases AND/OR album lookups
 
 Core functionality:
+- Submit a Playlist link
 - Page Progression (not all on new.html)
 - View/Select Personal Playlists after  (use css flex for display)
-- Submit a Playlist link
 - Shuffle & Play <x> songs
-
-Answer formatting:
-- Hemming Distance for awkward song spelling (i.e. worst nites => worst nights)
-:) String Standardization/Cleaning (i.e. remove "(Deluxe)" from album names) => Improvement item added
-:) Handle Special Characters => Improvement item added
 
 Goals:
 - Reveal Answer button!
-- Disable pausing from browser? maybe not necessary
+X Disable pausing from browser? maybe not necessary => I literally have a pause button. It responds nicely now. Let players pause if they want.
 - remove answers at top. maybe have debug mode?
 - Function that focuses unanswered fields
 - Replace breaks with css spacing/padding
@@ -30,25 +25,22 @@ Goals:
 - Presentable Front End Theme
 - Determine if song should automatically play when starts on web browser
 - Less hacky special character substitution
-- Prepare next song in que for seamless album/info updates.
+X Prepare next song in que for seamless album/info updates. => might be good without that
+- Hemming Distance for awkward song spelling (i.e. worst nites => worst nights)
 
 Bugs/Improvement:
-- End of song updates are a little off
+- Remove update_track shizz I don't need anymore
+- End of song updates are a little off => Scheduling needs to be corrected.
 - Album lookups for singles, and for expansion albums
-:) awaits using "send_simple_request" aren't true promises. sends request, doesn't wait for response.
 - Verify "tag_text" in clean_album name is excessive
-- if by some chance the same song plays twice in a row, I do not believe the song updates properly. does not on click. maybe use ID for this?
+:) if by some chance the same song plays twice in a row, I do not believe the song updates properly. does not on click. maybe use ID for this?
     => should only schedule update on a TRUE pause
 - Flickery album updates => multiple updates occurring? Random flickers throughout song? => Multiple update timers set.
-:) Doesn't load album cover on startup unless spotify is previously playing on another device? Now not at all?
-- If "next song" selected while paused, will play automatically. Button SHOULD display "PAUSE" but doesn't
+:) If "next song" selected while paused, will play automatically. Button SHOULD display "PAUSE" but doesn't
 - Consider: Pause after end of song => manual continues OR repeat song
-:) let song = data.item.name; => Sometimes undefined??
-    --> Thought fixed,  but it isn't. Within update track function that has its own call
-    --> I BELIEVE if we fix initial song behavior, this will be fixed
-- Update song state event gives like 3 alerts => Detect which are pauses, resumes, skips, etc. behave appropriately.
-    --> Appears to be down to 2
-- Remove excessive console logs. Improve logging content quality.
+:) Update song state event gives like 3 alerts => Detect which are pauses, resumes, skips, etc. behave appropriately.
+    --> Appears to be down to GONE????
+:) Remove excessive console logs. Improve logging content quality. (PROGRESS MADE)
 
 Other ideas:
 - Parcels => enable hot modulation (tool)
