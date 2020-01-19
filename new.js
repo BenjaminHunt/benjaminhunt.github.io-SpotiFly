@@ -28,10 +28,9 @@ window.onSpotifyWebPlaybackSDKReady = async () => {
     let token = auth();
     let x = await start_player(token);
     console.log(x);
-    await play_this_browser();
+    await play_this_browser();  // sets to play automatically.
     console.log("playing this device");
-    await resume_song(); // do i want to?
-    // update_track(); // doesn't work here?
+    update_track();
 };
 
 evaluate_answers = () => {
@@ -88,6 +87,16 @@ clean_album_name = (album) => {
         return album_trimmed;
     }
     return album;
+};
+
+clean_song_name = (song) => {
+    if(song.includes("(feat."))
+        song = song.substring(0, song.indexOf("(feat.") - 1);
+    if(song.includes("(ft."))
+        song = song.substring(0, song.indexOf("(ft.") - 1);
+    if(song.includes("(with.") && song.includes(")"))
+        song = song.substring(0, song.indexOf("(with") - 1);
+    return song;
 };
 
 guess_song = (event) => {
@@ -196,7 +205,7 @@ start_player = async (token) => {
     return new Promise((resolve, reject) => {
         const player = new Spotify.Player({
         name: get_player_name(),
-        getOAuthToken: cb => { cb(token); }
+            getOAuthToken: cb => { cb(token); }
         });
 
         // Error handling
@@ -286,35 +295,38 @@ get_artists_str = (artists) => {
 };
 
 send_simple_request = (method, url_param) => {
-    $.ajax({
-        type: method,
-        url: url_param,
-        beforeSend: function (xhr) {
-            xhr.setRequestHeader("Authorization", "Bearer " + document.token);
-            xhr.setRequestHeader("Accept", "application/json");
-            xhr.setRequestHeader("Content-Type", "application/json");
-        }, success: function (data) {
-            if(data)
-                console.log(data);
-            else
-                console.log("no data");
-        }
+    return new Promise((resolve, reject) => {
+        $.ajax({
+            type: method,
+            url: url_param,
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("Authorization", "Bearer " + document.token);
+                xhr.setRequestHeader("Accept", "application/json");
+                xhr.setRequestHeader("Content-Type", "application/json");
+            }, success: function (data) {
+                if(data)
+                    resolve(data);
+                else
+                    resolve("simple request complete.");
+            }
+        });
     });
 };
 
-send_simple_request_with_pay = (method, url_param, payload, is_async) => {
-    $.ajax({
-        type: method,
-        url: url_param,
-        data: JSON.stringify(payload),
-        async: is_async,
-        beforeSend: function (xhr) {
-            xhr.setRequestHeader("Authorization", "Bearer " + document.token);
-            xhr.setRequestHeader("Accept", "application/json");
-            xhr.setRequestHeader("Content-Type", "application/json");
-        }, success: function (data) {
-            console.log(data);
-        }
+send_simple_request_with_pay = (method, url_param, payload) => {
+    return new Promise((resolve, reject) => {
+        $.ajax({
+            type: method,
+            url: url_param,
+            data: JSON.stringify(payload),
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("Authorization", "Bearer " + document.token);
+                xhr.setRequestHeader("Accept", "application/json");
+                xhr.setRequestHeader("Content-Type", "application/json");
+            }, success: function (data) {
+                resolve(data);
+            }
+        });
     });
 };
 
@@ -339,9 +351,8 @@ update_track = () => {
         }, success: function(data){
             if(data){
                 console.log(data);
-                let song = data.item.name;
-                if(song.includes("(feat."))
-                    song = song.substring(0, song.indexOf("(feat.") - 1);
+                let song = clean_song_name(data.item.name);
+
                 let num_artists = data.item.artists.length;
                 let artists = parse_artists(data.item.artists, num_artists);
                 let album = data.item.album.name;
@@ -404,11 +415,11 @@ next_song = () => {
 };
 
 play_this_browser = () => {
-    return new Promise((resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
         const url_param = "https://api.spotify.com/v1/me/player";
-        const payload = {"device_ids":[document.player_id]};
+        const payload = {"device_ids":[document.player_id], "play": true};
 
-        send_simple_request_with_pay("PUT", url_param, payload, true);
+        await send_simple_request_with_pay("PUT", url_param, payload);
         resolve("playing in this browser!");
     });
 };
@@ -450,10 +461,10 @@ schedule_update = (pos, dur) => {
         document.update_timer = new Timer(() => {
             update_track();
             console.log("Scheduled update created.");
-        }, time_ms + 300);
+        }, time_ms + 500);
     }
     else{
-        document.update_timer.reset_timer(time_ms);
+        document.update_timer.reset_timer(time_ms + 500);
         console.log("Update Timer Set.");
     }
 };
