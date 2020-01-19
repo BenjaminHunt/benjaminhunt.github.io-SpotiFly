@@ -29,8 +29,9 @@ window.onSpotifyWebPlaybackSDKReady = async () => {
     let x = await start_player(token);
     console.log(x);
     await play_this_browser();
+    console.log("playing this device");
     await resume_song(); // do i want to?
-    update_track(); // doesn't work here?
+    // update_track(); // doesn't work here?
 };
 
 evaluate_answers = () => {
@@ -214,7 +215,7 @@ start_player = async (token) => {
         player.addListener('ready', ({ device_id }) => {
             console.log('Ready with Device ID', device_id);
             document.player_id = device_id;
-            resolve("Player Started :)")
+            resolve("Player Started :)");
         });
 
         // Not Ready
