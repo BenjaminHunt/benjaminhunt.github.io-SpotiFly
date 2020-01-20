@@ -30,7 +30,7 @@ window.onSpotifyWebPlaybackSDKReady = async () => {
     console.log(x);
     await play_this_browser();  // sets to play automatically.
     console.log("playing this device");
-    update_track();
+    shuffle();
 };
 
 evaluate_answers = () => {
@@ -301,8 +301,8 @@ send_simple_request = (method, url_param) => {
             url: url_param,
             beforeSend: function (xhr) {
                 xhr.setRequestHeader("Authorization", "Bearer " + document.token);
-                xhr.setRequestHeader("Accept", "application/json");
-                xhr.setRequestHeader("Content-Type", "application/json");
+                //xhr.setRequestHeader("Accept", "application/json");
+                //xhr.setRequestHeader("Content-Type", "application/json");
             }, success: function (data) {
                 if(data)
                     resolve(data);
@@ -348,33 +348,19 @@ track_mismatch = () => {
         )
 };
 
-extract_track_id = (data) => {
-    if(data.item)
-        return data.item.id;
-    else if(data.track_window)
-        return data.track_window.current_track.id;
-    return null;
-};
-
 post_state_update = (data) => {
-    let id = extract_track_id(data);
+    let id = data.track_window.current_track.id;
+
     if(id === document.track_id)
         return;
 
-    //this normalizes state change/update_track for song update
-    if(data.track_window){
-        let item = data.track_window.current_track;
-        data = {
-            'item': item
-        };
-        console.log('>>', data);
-    }
+    console.log("update >> ", data);
 
-    let song = clean_song_name(data.item.name);
-    let num_artists = data.item.artists.length;
-    let artists = parse_artists(data.item.artists, num_artists);
-    let album = clean_song_name(data.item.album.name); //to handle "ft." in singles, etc.
-    let album_cover = data.item.album.images[0].url;
+    let song = clean_song_name(data.track_window.current_track.name);
+    let num_artists = data.track_window.current_track.artists.length;
+    let artists = parse_artists(data.track_window.current_track.artists, num_artists);
+    let album = clean_song_name(data.track_window.current_track.album.name); //to handle "ft." in singles, etc.
+    let album_cover = data.track_window.current_track.album.images[0].url;
 
     document.track_id = id;
     document.pos = data.progress_ms;
@@ -385,7 +371,7 @@ post_state_update = (data) => {
     document.getElementById("album_cover").innerHTML = "<img src=\"" +
         album_cover + "\" height=\"450\" width=\"auto\">";
 
-    display_song_info();
+    //display_song_info();
     reset_guessing_fields();
 };
 
@@ -420,6 +406,44 @@ next_song = () => {
     reset_guessing_fields();
 };
 
+shuffle = () => {
+    setTimeout(function(){
+        send_simple_request(
+            "PUT",
+            "https://api.spotify.com/v1/me/player/shuffle?state=true"
+        )
+    }, 1000);
+
+};
+
+search_playlist = (event) => {
+    if(event){
+        if(event.code !== "Enter"){
+            return null;
+        }
+    }
+    let input = document.getElementById("playlist_input").value;
+    if(input === "" || input === null)
+        return null;
+
+    let url = "open.spotify.com";
+    if(input.includes(url)){
+        let trim_index_a = input.indexOf(url) + url.length;
+        input = "spotify" + input.substr(trim_index_a).replace(/\//g, ':');
+        input = input.substr(0, input.lastIndexOf('?'));
+        alert(input);
+    }
+
+    send_simple_request_with_pay(
+        "PUT",
+        "https://api.spotify.com/v1/me/player/play",
+        {
+            "context_uri": input
+        }
+    );
+    document.getElementById("playlist_input").value = '';
+};
+
 play_this_browser = () => {
     return new Promise(async (resolve, reject) => {
         const url_param = "https://api.spotify.com/v1/me/player";
@@ -428,6 +452,20 @@ play_this_browser = () => {
         await send_simple_request_with_pay("PUT", url_param, payload);
         resolve("playing in this browser!");
     });
+};
+
+reveal_answers = () => {
+    let empty_str = "";
+    // document.getElementById("song_state").innerHTML = empty_str;
+    // document.getElementById("artist_state").innerHTML = empty_str;
+    // document.getElementById("album_state").innerHTML = empty_str;
+    document.getElementById("song_guess").value = document.song;
+    document.getElementById("artist_guess").value = document.artists.join(", ");
+    document.getElementById("album_guess").value = document.album;
+    document.getElementById("song_guess").disabled = true;
+    document.getElementById("artist_guess").disabled = true;
+    document.getElementById("album_guess").disabled = true;
+    document.getElementById("album_cover").classList.remove("album_covered");
 };
 
 reset_guessing_fields = () => {

@@ -1,20 +1,20 @@
 TODO List for this app:
 
 Shortlist:
-- playlist link support
+:) playlist link support
 - use cookies/local storage
 - single as answer for single releases AND/OR album lookups
 
 Core functionality:
-- Submit a Playlist link
+:) *** Submit a Playlist URI
 - Page Progression (not all on new.html)
 - View/Select Personal Playlists after  (use css flex for display)
-- Shuffle & Play <x> songs
+:) Shuffle
+- Play <x> songs
 
 Goals:
-- Reveal Answer button!
-X Disable pausing from browser? maybe not necessary => I literally have a pause button. It responds nicely now. Let players pause if they want.
-- remove answers at top. maybe have debug mode?
+:) Reveal Answer button! => Can be broken down more
+:) remove answers at top. => maybe have debug mode?
 - Function that focuses unanswered fields
 - Replace breaks with css spacing/padding
 - Track Progression Bar, timer
@@ -25,18 +25,13 @@ X Disable pausing from browser? maybe not necessary => I literally have a pause 
 - Presentable Front End Theme
 - Determine if song should automatically play when starts on web browser
 - Less hacky special character substitution
-X Prepare next song in que for seamless album/info updates. => might be good without that
 - Hemming Distance for awkward song spelling (i.e. worst nites => worst nights)
 
 Bugs/Improvement:
-:) Remove update_track shizz I don't need anymore
-X Remove update schedule => Keeping for progression bar
-:) End of song updates are a little off => Scheduling needs to be corrected.
 - Album lookups for singles, and for expansion albums
 - Verify "tag_text" in clean_album name is excessive
-:) Flickery album updates => multiple updates occurring? Random flickers throughout song? => Multiple update timers set.
 - Consider: Pause after end of song => manual continues OR repeat song
-- REMOVE UPDATE TRACK ENTIRELY :)
+:) REMOVE UPDATE TRACK ENTIRELY :)
 
 
 Other ideas:
