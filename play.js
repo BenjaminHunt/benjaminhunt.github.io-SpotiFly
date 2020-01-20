@@ -260,7 +260,8 @@ auth = () => {
   // Replace with your app's client ID, redirect URI and desired scopes
   const clientId = 'd5e546a8a593407b92e7ff95044e576e';
   //const redirectUri = 'http://localhost:8000/new.html';
-  const redirectUri = 'http://localhost:8000/main.html';
+  const redirectUri = 'https://benjaminhunt.github.io/benjaminhunt.github.io-SpotiFly/main.html';
+
   const permission_scopes = [
       "streaming",
       "user-read-email",
