@@ -1,20 +1,15 @@
 TODO List for this app:
 
 Shortlist:
-:) playlist link support
 - use cookies/local storage
 - single as answer for single releases AND/OR album lookups
 
 Core functionality:
-:) *** Submit a Playlist URI
 - Page Progression (not all on new.html)
 - View/Select Personal Playlists after  (use css flex for display)
-:) Shuffle
 - Play <x> songs
 
 Goals:
-:) Reveal Answer button! => Can be broken down more
-:) remove answers at top. => maybe have debug mode?
 - Function that focuses unanswered fields
 - Replace breaks with css spacing/padding
 - Track Progression Bar, timer
@@ -28,10 +23,10 @@ Goals:
 - Hemming Distance for awkward song spelling (i.e. worst nites => worst nights)
 
 Bugs/Improvement:
+- Refactor page names
 - Album lookups for singles, and for expansion albums
 - Verify "tag_text" in clean_album name is excessive
 - Consider: Pause after end of song => manual continues OR repeat song
-:) REMOVE UPDATE TRACK ENTIRELY :)
 
 
 Other ideas:
