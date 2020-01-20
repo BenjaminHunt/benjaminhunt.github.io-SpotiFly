@@ -3,7 +3,7 @@ This is a song information guessing game!
 
 This will allow users to sign in with Spotify's Implicit Authentication Flow, select a playlist, and give them an opportunity to test their knowledge on their favorite songs by guessing the song's name, artist, and album.
 
-### Visit GitHub Pages
+### Visit SpotiFly on GitHub Pages
 - Click here: https://benjaminhunt.github.io/benjaminhunt.github.io-SpotiFly/main.html
 
 ### Start Player Locally
