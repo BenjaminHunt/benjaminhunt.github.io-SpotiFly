@@ -25,7 +25,7 @@ Goals:
 Bugs/Improvement:
 - wider playlist input bar
 - CSS formatting to replace HTML spacing
-- Refactor page names
+:) Refactor page names
 - Album lookups for singles, and for expansion albums
 - Verify "tag_text" in clean_album name is excessive
 - Consider: Pause after end of song => manual continues OR repeat song
