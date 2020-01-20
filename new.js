@@ -431,7 +431,6 @@ search_playlist = (event) => {
         let trim_index_a = input.indexOf(url) + url.length;
         input = "spotify" + input.substr(trim_index_a).replace(/\//g, ':');
         input = input.substr(0, input.lastIndexOf('?'));
-        alert(input);
     }
 
     send_simple_request_with_pay(
