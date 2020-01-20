@@ -29,13 +29,14 @@ X Prepare next song in que for seamless album/info updates. => might be good wit
 - Hemming Distance for awkward song spelling (i.e. worst nites => worst nights)
 
 Bugs/Improvement:
-- Remove update_track shizz I don't need anymore
-- Remove update schedule
-- End of song updates are a little off => Scheduling needs to be corrected.
+:) Remove update_track shizz I don't need anymore
+X Remove update schedule => Keeping for progression bar
+:) End of song updates are a little off => Scheduling needs to be corrected.
 - Album lookups for singles, and for expansion albums
 - Verify "tag_text" in clean_album name is excessive
-- Flickery album updates => multiple updates occurring? Random flickers throughout song? => Multiple update timers set.
+:) Flickery album updates => multiple updates occurring? Random flickers throughout song? => Multiple update timers set.
 - Consider: Pause after end of song => manual continues OR repeat song
+- REMOVE UPDATE TRACK ENTIRELY :)
 
 
 Other ideas:

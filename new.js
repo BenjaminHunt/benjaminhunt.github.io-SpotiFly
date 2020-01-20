@@ -356,39 +356,6 @@ extract_track_id = (data) => {
     return null;
 };
 
-post_playing_update = (data) => {
-    let id = extract_track_id(data);
-    if(id === document.track_id)
-        return;
-
-    //this normalizes state change/update_track for song update
-    if(data.track_window){
-        let item = data.track_window.current_track;
-        data = {
-            'item': item
-        };
-        console.log('>>', data);
-    }
-
-    let song = clean_song_name(data.item.name);
-    let num_artists = data.item.artists.length;
-    let artists = parse_artists(data.item.artists, num_artists);
-    let album = clean_song_name(data.item.album.name); //to handle "ft." in singles, etc.
-    let album_cover = data.item.album.images[0].url;
-
-    document.track_id = id;
-    document.pos = data.progress_ms;
-    document.song = song;
-    document.artists = artists;
-    document.album = album;
-
-    document.getElementById("album_cover").innerHTML = "<img src=\"" +
-        album_cover + "\" height=\"450\" width=\"auto\">";
-
-    display_song_info();
-    reset_guessing_fields();
-};
-
 post_state_update = (data) => {
     let id = extract_track_id(data);
     if(id === document.track_id)
@@ -420,24 +387,6 @@ post_state_update = (data) => {
 
     display_song_info();
     reset_guessing_fields();
-};
-
-update_track = () => {
-    $.ajax({
-        url: "https://api.spotify.com/v1/me/player/currently-playing",
-        beforeSend: function(xhr) {
-            xhr.setRequestHeader("Authorization", "Bearer " + document.token);
-            xhr.setRequestHeader("Accept", "application/json");
-            xhr.setRequestHeader("Content-Type", "application/json");
-        }, success: function(data){
-            if(data){
-                console.log("update_track > ", data);
-                post_playing_update(data);
-            }
-            else
-                console.log("update_track > No return data.");
-        }
-    });
 };
 
 pause_song = async () => {
@@ -512,7 +461,7 @@ schedule_update = (pos, dur) => {
     let time_ms = dur - pos;
     if(!document.update_timer){
         document.update_timer = new Timer(() => {
-            update_track();
+            //update_track(); //removed
             console.log("Scheduled update created.");
         }, time_ms + 1000);
     }
