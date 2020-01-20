@@ -65,7 +65,7 @@ guess_matches_enough = (guess, answer) => {
         let correct = true;
         answer = answer.replace(/[^!@&#$?()/=% a-zA-Z0-9]/g, "*");
         let i;
-        if(guess.length > 0){
+        if(guess.length === answer.length){
             for(i = 0; i < guess.length; i++){
                 if(!(guess[i] === answer[i] || answer[i] === "*")){
                     correct = false;
@@ -120,9 +120,9 @@ guess_song = (event) => {
             if(pos_b < pos_a){
                 state_val = ':(';
             }
-            let primary = answer.substr(0, pos_a - 1);
-            let secondary = answer.substr(pos_a + 1, (pos_b - 1) - pos_a);
-            if(guess_matches_enough(primary, answer) || guess_matches_enough(secondary, answer))
+            let primary_ans = answer.substr(0, pos_a - 1);
+            let secondary_ans = answer.substr(pos_a + 1, (pos_b - 1) - pos_a);
+            if(guess_matches_enough(guess, primary_ans) || guess_matches_enough(guess, secondary_ans))
                 correct = true;
             else
                 state_val = ':(';
