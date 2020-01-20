@@ -65,11 +65,13 @@ guess_matches_enough = (guess, answer) => {
         let correct = true;
         answer = answer.replace(/[^!@&#$?()/=% a-zA-Z0-9]/g, "*");
         let i;
-        for(i = 0; i < guess.length; i++){
-            if(!(guess[i] === answer[i] || answer[i] === "*")){
-                correct = false;
+        if(guess.length > 0){
+            for(i = 0; i < guess.length; i++){
+                if(!(guess[i] === answer[i] || answer[i] === "*")){
+                    correct = false;
+                }
             }
-        }
+        }else{return false;}
         return correct;
     }
 };
@@ -244,7 +246,7 @@ auth = () => {
   .split('&')
   .reduce(function (initial, item) {
     if (item) {
-      var parts = item.split('=');
+      let parts = item.split('=');
       initial[parts[0]] = decodeURIComponent(parts[1]);
     }
     return initial;
@@ -259,7 +261,7 @@ auth = () => {
 
   // Replace with your app's client ID, redirect URI and desired scopes
   const clientId = 'd5e546a8a593407b92e7ff95044e576e';
-  //const redirectUri = 'http://localhost:8000/new.html';
+  //const redirectUri = 'http://localhost:8000/main.html';
   const redirectUri = 'https://benjaminhunt.github.io/benjaminhunt.github.io-SpotiFly/main.html';
 
   const permission_scopes = [
