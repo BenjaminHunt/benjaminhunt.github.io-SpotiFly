@@ -11,14 +11,13 @@
   <h1 id="header1"></h1>
   <h1>SpotiFly Song Guessing Game!</h1>
   <div id="input_url">
-    <input type="text" id="playlist_input" placeholder="Spotify URL or URI" width="200" onkeydown="search_playlist(event)">
+    <input type="text" id="playlist_input" placeholder="Spotify URL or URI" onkeydown="search_playlist(event)">
     <button id="search_playlist" type="button" onclick="search_playlist()">Update Playlist</button>
   </div>
   <div id="game_display">
     <div id="song_info_debug">
       <br>
     </div>
-
     <div id="album_cover" class="album_covered">
       <img src="" height="450" width="auto">
     </div>
@@ -26,7 +25,7 @@
       <button id="reveal" type="button" onclick="reveal_answers()">Reveal</button>
       <button id="pause" type="button" onclick="pause_resume_song()">Pause</button>
       <button id="next_song" type="button" onclick="next_song()">Next Song</button>
-      <br><br><br>
+      <br><br>
     </div>
     <table style="text-align: center">
       <tr>
