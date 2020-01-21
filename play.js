@@ -192,18 +192,21 @@ guess_album = (event) => {
         answer.forEach(accepted_album_name => {
             if(guess_matches_enough(guess, accepted_album_name)){
                 correct = true;
-            }
+            }else if(accepted_album_name.includes(' - ')) {
+                let pos = accepted_album_name.indexOf(' - ');
+                let secondary_ans = accepted_album_name.substr(0, pos);
+                console.log(secondary_ans);
+                if(guess_matches_enough(guess, secondary_ans)){
+                    correct = true;
+                }else
+                    state_val = ':(';
+                }
         });
         if(!correct)
             state_val = ':(';
-    }else if(answer.includes(' - ')) {
-        let pos = answer.indexOf(' - ');
-        let secondary_ans = answer.substr(0, pos);
-        if(guess_matches_enough(guess, secondary_ans)){
-            correct = true;
-        }else
-            state_val = ':(';
-    }if(correct){
+    }
+
+    if(correct){
         document.getElementById("album_guess").value = document.album;
         document.getElementById("album_guess").disabled = true;
         state_val = ':)';
