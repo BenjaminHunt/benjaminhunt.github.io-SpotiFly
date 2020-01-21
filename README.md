@@ -12,7 +12,7 @@ This will allow users to sign in with Spotify's Implicit Authentication Flow, se
 1. clone this repository
 2. modify redirect url within the `auth()` js function to be `localhost:8000/main.html`
 3. run `py -m http.server` from the root repository *--Or use an alternative method to host the page locally*
-4. visit `localhost:8000/main.html` in a web browser (**Note:** I am currently only using Google Chrome)
+4. visit `localhost:8000/main.html` in a web browser (**Note:** I am currently only testing with Google Chrome)
 
 ### Resources
 - Spotify Web API
