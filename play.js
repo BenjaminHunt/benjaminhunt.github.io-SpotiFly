@@ -53,12 +53,11 @@ guess_matches_enough = (guess, answer) => {
         answer = answer.replace("+", "&");
         answer = answer.replace("&", " & ");
         answer = answer.replace("&", "and");
-        answer = answer.replace(/\s+/g,' ').trim();answer = answer.replace("+", "&");
+        answer = answer.replace(/\s+/g,' ').trim();
+        guess = guess.replace("+", "&");
         guess = guess.replace("&", " & ");
         guess = guess.replace("&", "and");
         guess = guess.replace(/\s+/g,' ').trim();
-        console.log("GUESS: " + guess);
-        console.log("ACCEPT: " + answer);
     }
     if(guess === answer){
         return true;
@@ -197,8 +196,14 @@ guess_album = (event) => {
         });
         if(!correct)
             state_val = ':(';
-    }
-    if(correct){
+    }else if(answer.includes(' - ')) {
+        let pos = answer.lastIndexOf(' - ');
+        let secondary_ans = answer.substr(0, pos);
+        if(guess_matches_enough(guess, secondary_ans)){
+            correct = true;
+        }else
+            state_val = ':(';
+    }if(correct){
         document.getElementById("album_guess").value = document.album;
         document.getElementById("album_guess").disabled = true;
         state_val = ':)';
