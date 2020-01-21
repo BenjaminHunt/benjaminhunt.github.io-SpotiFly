@@ -30,7 +30,7 @@ window.onSpotifyWebPlaybackSDKReady = async () => {
     console.log(x);
     await play_this_browser();  // sets to play automatically.
     console.log("playing this device");
-    set_volume(70);
+    set_volume(35);
     shuffle();
 };
 
