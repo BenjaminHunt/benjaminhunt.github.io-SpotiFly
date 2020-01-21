@@ -10,6 +10,7 @@ Core functionality:
 - Play <x> songs
 
 Goals:
+- font awesome for buttons/volume
 - Volume slider
 - submit answer button?
 - Function that focuses unanswered fields

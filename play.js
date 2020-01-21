@@ -30,7 +30,7 @@ window.onSpotifyWebPlaybackSDKReady = async () => {
     console.log(x);
     await play_this_browser();  // sets to play automatically.
     console.log("playing this device");
-    set_volume(35);
+    set_volume(30);
     shuffle();
 };
 
@@ -412,13 +412,35 @@ next_song = () => {
 };
 
 set_volume = (vol) => {
+    if(vol > 100){
+        vol = 100;
+    }else if(vol < 0){
+        vol = 0;
+    }
     setTimeout(async function(){
         await send_simple_request(
             "PUT",
             "https://api.spotify.com/v1/me/player/volume?volume_percent=" + vol
-        )
+        );
         console.log("Volume set to " + vol + "%");
+        document.volume = vol;
     }, 500);
+};
+
+shift_volume = async (diff) => {
+    let vol = document.volume + diff;
+    if(vol > 100){
+        vol = 100;
+    }else if(vol < 0){
+        vol = 0;
+    }
+    await send_simple_request(
+        "PUT",
+        "https://api.spotify.com/v1/me/player/volume?volume_percent=" + vol
+    );
+    //set_volume(vol);
+    console.log("Volume set to " + vol + "%");
+    document.volume = vol;
 };
 
 shuffle = () => {
