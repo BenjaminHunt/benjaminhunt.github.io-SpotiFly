@@ -127,7 +127,7 @@ guess_song = (event) => {
             else
                 state_val = ':(';
         }else if(answer.includes(' - ')) {
-            let pos = answer.lastIndexOf(' - ');
+            let pos = answer.indexOf(' - ');
             let secondary_ans = answer.substr(0, pos);
             if(guess_matches_enough(guess, secondary_ans)){
                 correct = true;
@@ -197,7 +197,7 @@ guess_album = (event) => {
         if(!correct)
             state_val = ':(';
     }else if(answer.includes(' - ')) {
-        let pos = answer.lastIndexOf(' - ');
+        let pos = answer.indexOf(' - ');
         let secondary_ans = answer.substr(0, pos);
         if(guess_matches_enough(guess, secondary_ans)){
             correct = true;
