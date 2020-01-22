@@ -48,6 +48,11 @@ guess_matches_enough = (guess, answer) => {
     guess = guess.toLowerCase();
     answer = answer.toLowerCase();
 
+    if(guess.substr(0, 4) === "the ")
+        guess = guess.substr(4);
+    if(answer.substr(0, 4) === "the ")
+        answer = answer.substr(4);
+
     //and substitution
     if(answer.includes("+") || answer.includes("&") || answer.includes("and")){
         answer = answer.replace("+", "&");
