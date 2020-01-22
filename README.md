@@ -6,7 +6,7 @@ This will allow users to sign in with Spotify's Implicit Authentication Flow, se
 **Important Note:** This *may* only work well for **Spotify Premium** users. I do not know what is supported for non-premium members.
 
 ### Visit SpotiFly on GitHub Pages
-- Click here: https://benjaminhunt.github.io/benjaminhunt.github.io-SpotiFly/main.html
+- [Click here](https://benjaminhunt.github.io/benjaminhunt.github.io-SpotiFly/main.html) to visit and play.
 
 ### Start Player Locally
 1. clone this repository
@@ -16,8 +16,8 @@ This will allow users to sign in with Spotify's Implicit Authentication Flow, se
 
 ### Resources
 - Spotify Web API
-  - Spotify Web Player: https://developer.spotify.com/documentation/web-playback-sdk/quick-start/#
-  - Spotify Implicit Auth: https://developer.spotify.com/documentation/general/guides/authorization-guide/#implicit-grant-flow
+  - [Spotify Web Player](https://developer.spotify.com/documentation/web-playback-sdk/quick-start/#)
+  - [Spotify Implicit Auth](https://developer.spotify.com/documentation/general/guides/authorization-guide/#implicit-grant-flow)
 - Code
   - HTML
   - JavaScript

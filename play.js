@@ -48,6 +48,11 @@ guess_matches_enough = (guess, answer) => {
     guess = guess.toLowerCase();
     answer = answer.toLowerCase();
 
+    if(guess.substr(0, 4) === "the ")
+        guess = guess.substr(4);
+    if(answer.substr(0, 4) === "the ")
+        answer = answer.substr(4);
+
     //and substitution
     if(answer.includes("+") || answer.includes("&") || answer.includes("and")){
         answer = answer.replace("+", "&");
@@ -128,8 +133,11 @@ guess_song = (event) => {
                 state_val = ':(';
         }else if(answer.includes(' - ')) {
             let pos = answer.indexOf(' - ');
-            let secondary_ans = answer.substr(0, pos);
-            if(guess_matches_enough(guess, secondary_ans)){
+            let primary_ans = answer.substr(0, pos);
+            let secondary_ans = answer.substr(pos + 3);
+            console.log(primary_ans);
+            console.log(secondary_ans);
+            if(guess_matches_enough(guess, primary_ans) || guess_matches_enough(guess, secondary_ans)){
                 correct = true;
             }else
                 state_val = ':(';
