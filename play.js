@@ -505,10 +505,6 @@ play_this_browser = () => {
 };
 
 reveal_answers = () => {
-    let empty_str = "";
-    // document.getElementById("song_state").innerHTML = empty_str;
-    // document.getElementById("artist_state").innerHTML = empty_str;
-    // document.getElementById("album_state").innerHTML = empty_str;
     document.getElementById("song_guess").value = document.song;
     document.getElementById("artist_guess").value = document.artists.join(", ");
     document.getElementById("album_guess").value = document.album;
