@@ -128,8 +128,10 @@ guess_song = (event) => {
                 state_val = ':(';
         }else if(answer.includes(' - ')) {
             let pos = answer.indexOf(' - ');
-            let primary_ans = answer.substr(pos + 3);
-            let secondary_ans = answer.substr(0, pos);
+            let primary_ans = answer.substr(0, pos);
+            let secondary_ans = answer.substr(pos + 3);
+            console.log(primary_ans);
+            console.log(secondary_ans);
             if(guess_matches_enough(guess, primary_ans) || guess_matches_enough(guess, secondary_ans)){
                 correct = true;
             }else
