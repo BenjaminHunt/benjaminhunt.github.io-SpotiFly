@@ -275,7 +275,7 @@ auth = () => {
     }
     return initial;
   }, {});
-  window.location.hash = 'https://benjaminhunt.github.io/benjaminhunt.github.io-SpotiFly/main.html';
+  window.location.hash = ''; // 'https://benjaminhunt.github.io/benjaminhunt.github.io-SpotiFly/main.html';
 
   // Set token
   let _token = hash.access_token;
