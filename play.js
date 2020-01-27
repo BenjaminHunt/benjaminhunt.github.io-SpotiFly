@@ -31,7 +31,7 @@ window.onSpotifyWebPlaybackSDKReady = async () => {
     await play_this_browser();  // sets to play automatically.
     console.log("playing this device");
     set_volume(30);
-    shuffle();
+    set_shuffle(true);
 };
 
 evaluate_answers = () => {
@@ -466,11 +466,17 @@ shift_volume = async (diff) => {
     document.volume = vol;
 };
 
-shuffle = () => {
+set_shuffle = (shuffle_state) => {
+    let state = '';
+    if(shuffle_state)
+        state = "true";
+    else
+        state = "false";
+
     setTimeout(function(){
         send_simple_request(
             "PUT",
-            "https://api.spotify.com/v1/me/player/shuffle?state=true"
+            "https://api.spotify.com/v1/me/player/shuffle?state=" + state
         )
     }, 1000);
 };
